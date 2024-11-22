@@ -1,6 +1,17 @@
 import ply.lex as lex
 
-tokens = ( 'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'LPAREN', 'RPAREN', 'NAME', 'NUMBER', 'FUNCTION', 'END_OF_LINE', 'KEYS', 'DECLARATION', 'RELATION' )
+tokens = ( 'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'LPAREN', 'RPAREN', 'NAME', 'NUMBER', 'FUNCTION', 'END_OF_LINE', 'KEYS', 'DECLARATION', 'RELATION', 'VAR',
+    'ASSIGN',
+    'IF',
+    'ELSE',
+    'EQUALS',
+    'NOTEQUALS',
+    'LESSTHAN',
+    'GREATERTHAN',
+    'LESSEQUAL',
+    'GREATEREQUAL',
+    'LBRACE',
+    'RBRACE' )
 
 t_PLUS = r'\+'
 t_MINUS = r'-'

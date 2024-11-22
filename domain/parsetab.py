@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'DECLARATION DIVIDE END_OF_LINE FUNCTION KEYS LPAREN MINUS NAME NUMBER PLUS RELATION RPAREN TIMES\n    expression : term PLUS term\n               | term MINUS term\n    \n    expression : term\n    \n    term : factor TIMES factor\n         | factor DIVIDE factor\n    \n    term : factor\n    \n    factor : NUMBER\n    \n    factor : NAME\n    \n    factor : PLUS factor\n           | MINUS factor\n    \n    factor : LPAREN expression RPAREN\n    '
+_lr_signature = 'ASSIGN DECLARATION DIVIDE ELSE END_OF_LINE EQUALS FUNCTION GREATEREQUAL GREATERTHAN IF KEYS LBRACE LESSEQUAL LESSTHAN LPAREN MINUS NAME NOTEQUALS NUMBER PLUS RBRACE RELATION RPAREN TIMES VAR\n    statement : assignment\n              | declaration\n              | if_statement\n              | expression\n    \n    statement_list : statement\n                  | statement_list statement\n    \n    declaration : VAR NAME\n                | VAR NAME ASSIGN expression\n    \n    assignment : NAME ASSIGN expression\n    \n    if_statement : IF condition block\n                | IF condition block ELSE block\n    \n    condition : expression EQUALS expression\n              | expression NOTEQUALS expression\n              | expression LESSTHAN expression\n              | expression GREATERTHAN expression\n              | expression LESSEQUAL expression\n              | expression GREATEREQUAL expression\n    \n    block : LBRACE statement_list RBRACE\n    \n    expression : term PLUS term\n               | term MINUS term\n    \n    expression : term\n    \n    term : factor TIMES factor\n         | factor DIVIDE factor\n    \n    term : factor\n    \n    factor : NUMBER\n    \n    factor : NAME\n    \n    factor : PLUS factor\n           | MINUS factor\n    \n    factor : LPAREN expression RPAREN\n    '
     
-_lr_action_items = {'NUMBER':([0,3,4,8,9,10,13,14,],[6,6,6,6,6,6,6,6,]),'NAME':([0,3,4,8,9,10,13,14,],[7,7,7,7,7,7,7,7,]),'PLUS':([0,2,3,4,5,6,7,8,9,10,11,12,13,14,18,19,20,],[3,9,3,3,-6,-7,-8,3,3,3,-9,-10,3,3,-4,-5,-11,]),'MINUS':([0,2,3,4,5,6,7,8,9,10,11,12,13,14,18,19,20,],[4,10,4,4,-6,-7,-8,4,4,4,-9,-10,4,4,-4,-5,-11,]),'LPAREN':([0,3,4,8,9,10,13,14,],[8,8,8,8,8,8,8,8,]),'$end':([1,2,5,6,7,11,12,16,17,18,19,20,],[0,-3,-6,-7,-8,-9,-10,-1,-2,-4,-5,-11,]),'RPAREN':([2,5,6,7,11,12,15,16,17,18,19,20,],[-3,-6,-7,-8,-9,-10,20,-1,-2,-4,-5,-11,]),'TIMES':([5,6,7,11,12,20,],[13,-7,-8,-9,-10,-11,]),'DIVIDE':([5,6,7,11,12,20,],[14,-7,-8,-9,-10,-11,]),}
+_lr_action_items = {'NAME':([0,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,19,20,21,22,23,24,25,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,44,45,52,53,54,],[6,-1,-2,-3,-4,-26,16,19,-21,19,19,-24,-25,19,19,-7,-26,19,19,-27,-28,19,19,-9,19,-10,6,19,19,19,19,19,19,-19,-20,-22,-23,-29,-8,6,-5,-11,-18,-6,]),'VAR':([0,2,3,4,5,6,9,12,13,16,19,22,23,27,29,30,37,38,39,40,41,42,44,45,52,53,54,],[7,-1,-2,-3,-4,-26,-21,-24,-25,-7,-26,-27,-28,-9,-10,7,-19,-20,-22,-23,-29,-8,7,-5,-11,-18,-6,]),'IF':([0,2,3,4,5,6,9,12,13,16,19,22,23,27,29,30,37,38,39,40,41,42,44,45,52,53,54,],[8,-1,-2,-3,-4,-26,-21,-24,-25,-7,-26,-27,-28,-9,-10,8,-19,-20,-22,-23,-29,-8,8,-5,-11,-18,-6,]),'NUMBER':([0,2,3,4,5,6,8,9,10,11,12,13,14,15,16,19,20,21,22,23,24,25,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,44,45,52,53,54,],[13,-1,-2,-3,-4,-26,13,-21,13,13,-24,-25,13,13,-7,-26,13,13,-27,-28,13,13,-9,13,-10,13,13,13,13,13,13,13,-19,-20,-22,-23,-29,-8,13,-5,-11,-18,-6,]),'PLUS':([0,2,3,4,5,6,8,9,10,11,12,13,14,15,16,19,20,21,22,23,24,25,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,44,45,52,53,54,],[10,-1,-2,-3,-4,-26,10,20,10,10,-24,-25,10,10,-7,-26,10,10,-27,-28,10,10,-9,10,-10,10,10,10,10,10,10,10,-19,-20,-22,-23,-29,-8,10,-5,-11,-18,-6,]),'MINUS':([0,2,3,4,5,6,8,9,10,11,12,13,14,15,16,19,20,21,22,23,24,25,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,44,45,52,53,54,],[11,-1,-2,-3,-4,-26,11,21,11,11,-24,-25,11,11,-7,-26,11,11,-27,-28,11,11,-9,11,-10,11,11,11,11,11,11,11,-19,-20,-22,-23,-29,-8,11,-5,-11,-18,-6,]),'LPAREN':([0,2,3,4,5,6,8,9,10,11,12,13,14,15,16,19,20,21,22,23,24,25,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,44,45,52,53,54,],[14,-1,-2,-3,-4,-26,14,-21,14,14,-24,-25,14,14,-7,-26,14,14,-27,-28,14,14,-9,14,-10,14,14,14,14,14,14,14,-19,-20,-22,-23,-29,-8,14,-5,-11,-18,-6,]),'$end':([1,2,3,4,5,6,9,12,13,16,19,22,23,27,29,37,38,39,40,41,42,52,53,],[0,-1,-2,-3,-4,-26,-21,-24,-25,-7,-26,-27,-28,-9,-10,-19,-20,-22,-23,-29,-8,-11,-18,]),'RBRACE':([2,3,4,5,6,9,12,13,16,19,22,23,27,29,37,38,39,40,41,42,44,45,52,53,54,],[-1,-2,-3,-4,-26,-21,-24,-25,-7,-26,-27,-28,-9,-10,-19,-20,-22,-23,-29,-8,53,-5,-11,-18,-6,]),'ASSIGN':([6,16,],[15,28,]),'TIMES':([6,12,13,19,22,23,41,],[-26,24,-25,-26,-27,-28,-29,]),'DIVIDE':([6,12,13,19,22,23,41,],[-26,25,-25,-26,-27,-28,-29,]),'EQUALS':([9,12,13,18,19,22,23,37,38,39,40,41,],[-21,-24,-25,31,-26,-27,-28,-19,-20,-22,-23,-29,]),'NOTEQUALS':([9,12,13,18,19,22,23,37,38,39,40,41,],[-21,-24,-25,32,-26,-27,-28,-19,-20,-22,-23,-29,]),'LESSTHAN':([9,12,13,18,19,22,23,37,38,39,40,41,],[-21,-24,-25,33,-26,-27,-28,-19,-20,-22,-23,-29,]),'GREATERTHAN':([9,12,13,18,19,22,23,37,38,39,40,41,],[-21,-24,-25,34,-26,-27,-28,-19,-20,-22,-23,-29,]),'LESSEQUAL':([9,12,13,18,19,22,23,37,38,39,40,41,],[-21,-24,-25,35,-26,-27,-28,-19,-20,-22,-23,-29,]),'GREATEREQUAL':([9,12,13,18,19,22,23,37,38,39,40,41,],[-21,-24,-25,36,-26,-27,-28,-19,-20,-22,-23,-29,]),'RPAREN':([9,12,13,19,22,23,26,37,38,39,40,41,],[-21,-24,-25,-26,-27,-28,41,-19,-20,-22,-23,-29,]),'LBRACE':([9,12,13,17,19,22,23,37,38,39,40,41,43,46,47,48,49,50,51,],[-21,-24,-25,30,-26,-27,-28,-19,-20,-22,-23,-29,30,-12,-13,-14,-15,-16,-17,]),'ELSE':([29,53,],[43,-18,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'expression':([0,8,],[1,15,]),'term':([0,8,9,10,],[2,2,16,17,]),'factor':([0,3,4,8,9,10,13,14,],[5,11,12,5,5,5,18,19,]),}
+_lr_goto_items = {'statement':([0,30,44,],[1,45,54,]),'assignment':([0,30,44,],[2,2,2,]),'declaration':([0,30,44,],[3,3,3,]),'if_statement':([0,30,44,],[4,4,4,]),'expression':([0,8,14,15,28,30,31,32,33,34,35,36,44,],[5,18,26,27,42,5,46,47,48,49,50,51,5,]),'term':([0,8,14,15,20,21,28,30,31,32,33,34,35,36,44,],[9,9,9,9,37,38,9,9,9,9,9,9,9,9,9,]),'factor':([0,8,10,11,14,15,20,21,24,25,28,30,31,32,33,34,35,36,44,],[12,12,22,23,12,12,12,12,39,40,12,12,12,12,12,12,12,12,12,]),'condition':([8,],[17,]),'block':([17,43,],[29,52,]),'statement_list':([30,],[44,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -26,16 +26,34 @@ for _k, _v in _lr_goto_items.items():
        _lr_goto[_x][_k] = _y
 del _lr_goto_items
 _lr_productions = [
-  ("S' -> expression","S'",1,None,None,None),
-  ('expression -> term PLUS term','expression',3,'p_expression','parser.py',8),
-  ('expression -> term MINUS term','expression',3,'p_expression','parser.py',9),
-  ('expression -> term','expression',1,'p_expression_term','parser.py',20),
-  ('term -> factor TIMES factor','term',3,'p_term','parser.py',26),
-  ('term -> factor DIVIDE factor','term',3,'p_term','parser.py',27),
-  ('term -> factor','term',1,'p_term_factor','parser.py',33),
-  ('factor -> NUMBER','factor',1,'p_factor_number','parser.py',39),
-  ('factor -> NAME','factor',1,'p_factor_name','parser.py',45),
-  ('factor -> PLUS factor','factor',2,'p_factor_unary','parser.py',51),
-  ('factor -> MINUS factor','factor',2,'p_factor_unary','parser.py',52),
-  ('factor -> LPAREN expression RPAREN','factor',3,'p_factor_grouped','parser.py',58),
+  ("S' -> statement","S'",1,None,None,None),
+  ('statement -> assignment','statement',1,'p_statement','parser.py',8),
+  ('statement -> declaration','statement',1,'p_statement','parser.py',9),
+  ('statement -> if_statement','statement',1,'p_statement','parser.py',10),
+  ('statement -> expression','statement',1,'p_statement','parser.py',11),
+  ('statement_list -> statement','statement_list',1,'p_statement_list','parser.py',17),
+  ('statement_list -> statement_list statement','statement_list',2,'p_statement_list','parser.py',18),
+  ('declaration -> VAR NAME','declaration',2,'p_declaration','parser.py',27),
+  ('declaration -> VAR NAME ASSIGN expression','declaration',4,'p_declaration','parser.py',28),
+  ('assignment -> NAME ASSIGN expression','assignment',3,'p_assignment','parser.py',37),
+  ('if_statement -> IF condition block','if_statement',3,'p_if_statement','parser.py',43),
+  ('if_statement -> IF condition block ELSE block','if_statement',5,'p_if_statement','parser.py',44),
+  ('condition -> expression EQUALS expression','condition',3,'p_condition','parser.py',53),
+  ('condition -> expression NOTEQUALS expression','condition',3,'p_condition','parser.py',54),
+  ('condition -> expression LESSTHAN expression','condition',3,'p_condition','parser.py',55),
+  ('condition -> expression GREATERTHAN expression','condition',3,'p_condition','parser.py',56),
+  ('condition -> expression LESSEQUAL expression','condition',3,'p_condition','parser.py',57),
+  ('condition -> expression GREATEREQUAL expression','condition',3,'p_condition','parser.py',58),
+  ('block -> LBRACE statement_list RBRACE','block',3,'p_block','parser.py',64),
+  ('expression -> term PLUS term','expression',3,'p_expression','parser.py',70),
+  ('expression -> term MINUS term','expression',3,'p_expression','parser.py',71),
+  ('expression -> term','expression',1,'p_expression_term','parser.py',77),
+  ('term -> factor TIMES factor','term',3,'p_term','parser.py',83),
+  ('term -> factor DIVIDE factor','term',3,'p_term','parser.py',84),
+  ('term -> factor','term',1,'p_term_factor','parser.py',90),
+  ('factor -> NUMBER','factor',1,'p_factor_number','parser.py',96),
+  ('factor -> NAME','factor',1,'p_factor_name','parser.py',102),
+  ('factor -> PLUS factor','factor',2,'p_factor_unary','parser.py',108),
+  ('factor -> MINUS factor','factor',2,'p_factor_unary','parser.py',109),
+  ('factor -> LPAREN expression RPAREN','factor',3,'p_factor_grouped','parser.py',115),
 ]
