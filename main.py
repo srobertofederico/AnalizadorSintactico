@@ -45,7 +45,7 @@ class Main(QMainWindow):
         self.layout.addWidget(QLabel('Analisis Sintactico', self))
         self.layout.addWidget(self.analisisSintactico)
 
-        # Botón para iniciar el análisis léxico
+        # Botón para iniciar el análisis léxico 
         self.analizarLexicoButton = QPushButton('Analizar Lexico', self)
         self.analizarLexicoButton.clicked.connect(self.ev_lexico)
         self.layout.addWidget(self.analizarLexicoButton)

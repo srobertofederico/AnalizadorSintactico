@@ -6,7 +6,7 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'DIVIDE LPAREN MINUS NAME NUMBER PLUS RPAREN TIMES\n    expression : term PLUS term\n               | term MINUS term\n    \n    expression : term\n    \n    term : factor TIMES factor\n         | factor DIVIDE factor\n    \n    term : factor\n    \n    factor : NUMBER\n    \n    factor : NAME\n    \n    factor : PLUS factor\n           | MINUS factor\n    \n    factor : LPAREN expression RPAREN\n    '
+_lr_signature = 'DECLARATION DIVIDE END_OF_LINE FUNCTION KEYS LPAREN MINUS NAME NUMBER PLUS RELATION RPAREN TIMES\n    expression : term PLUS term\n               | term MINUS term\n    \n    expression : term\n    \n    term : factor TIMES factor\n         | factor DIVIDE factor\n    \n    term : factor\n    \n    factor : NUMBER\n    \n    factor : NAME\n    \n    factor : PLUS factor\n           | MINUS factor\n    \n    factor : LPAREN expression RPAREN\n    '
     
 _lr_action_items = {'NUMBER':([0,3,4,8,9,10,13,14,],[6,6,6,6,6,6,6,6,]),'NAME':([0,3,4,8,9,10,13,14,],[7,7,7,7,7,7,7,7,]),'PLUS':([0,2,3,4,5,6,7,8,9,10,11,12,13,14,18,19,20,],[3,9,3,3,-6,-7,-8,3,3,3,-9,-10,3,3,-4,-5,-11,]),'MINUS':([0,2,3,4,5,6,7,8,9,10,11,12,13,14,18,19,20,],[4,10,4,4,-6,-7,-8,4,4,4,-9,-10,4,4,-4,-5,-11,]),'LPAREN':([0,3,4,8,9,10,13,14,],[8,8,8,8,8,8,8,8,]),'$end':([1,2,5,6,7,11,12,16,17,18,19,20,],[0,-3,-6,-7,-8,-9,-10,-1,-2,-4,-5,-11,]),'RPAREN':([2,5,6,7,11,12,15,16,17,18,19,20,],[-3,-6,-7,-8,-9,-10,20,-1,-2,-4,-5,-11,]),'TIMES':([5,6,7,11,12,20,],[13,-7,-8,-9,-10,-11,]),'DIVIDE':([5,6,7,11,12,20,],[14,-7,-8,-9,-10,-11,]),}
 

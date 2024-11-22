@@ -1,6 +1,6 @@
 import ply.lex as lex
 
-tokens = ( 'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'LPAREN', 'RPAREN', 'NAME', 'NUMBER' )
+tokens = ( 'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'LPAREN', 'RPAREN', 'NAME', 'NUMBER', 'FUNCTION', 'END_OF_LINE', 'KEYS', 'DECLARATION', 'RELATION' )
 
 t_PLUS = r'\+'
 t_MINUS = r'-'
@@ -9,6 +9,10 @@ t_DIVIDE = r'/'
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_NAME = r'[a-zA-Z_][a-zA-Z0-9_]*'
+t_KEYS = r'[{}]'
+t_END_OF_LINE = r'\;'
+t_DECLARATION = r'='
+t_RELATION = r'==|!=|<=|>=|<|>'
 t_ignore = ' \t'
 
 # A function can be used if there is an associated action.
@@ -16,6 +20,10 @@ t_ignore = ' \t'
 def t_NUMBER(t):
     r'\d+'
     t.value = int(t.value)
+    return t
+
+def t_FUNCTION(t):
+    r'\b(if|else)\b'
     return t
 
 # Ignored token with an action associated with it
