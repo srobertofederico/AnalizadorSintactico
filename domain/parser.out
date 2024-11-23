@@ -2,26 +2,22 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
-    DECLARATION
-    END_OF_LINE
-    FUNCTION
-    KEYS
-    RELATION
+    ERROR
 
 Grammar
 
-Rule 0     S' -> statement
-Rule 1     statement -> assignment
-Rule 2     statement -> declaration
-Rule 3     statement -> if_statement
-Rule 4     statement -> expression
-Rule 5     statement_list -> statement
-Rule 6     statement_list -> statement_list statement
+Rule 0     S' -> program
+Rule 1     program -> statement_list
+Rule 2     statement_list -> statement
+Rule 3     statement_list -> statement_list statement
+Rule 4     statement -> assignment END_OF_LINE
+Rule 5     statement -> declaration END_OF_LINE
+Rule 6     statement -> if_statement
 Rule 7     declaration -> VAR NAME
 Rule 8     declaration -> VAR NAME ASSIGN expression
 Rule 9     assignment -> NAME ASSIGN expression
-Rule 10    if_statement -> IF condition block
-Rule 11    if_statement -> IF condition block ELSE block
+Rule 10    if_statement -> IF LPAREN condition RPAREN block
+Rule 11    if_statement -> IF LPAREN condition RPAREN block ELSE block
 Rule 12    condition -> expression EQUALS expression
 Rule 13    condition -> expression NOTEQUALS expression
 Rule 14    condition -> expression LESSTHAN expression
@@ -29,239 +25,302 @@ Rule 15    condition -> expression GREATERTHAN expression
 Rule 16    condition -> expression LESSEQUAL expression
 Rule 17    condition -> expression GREATEREQUAL expression
 Rule 18    block -> LBRACE statement_list RBRACE
-Rule 19    expression -> term PLUS term
-Rule 20    expression -> term MINUS term
+Rule 19    expression -> expression PLUS term
+Rule 20    expression -> expression MINUS term
 Rule 21    expression -> term
-Rule 22    term -> factor TIMES factor
-Rule 23    term -> factor DIVIDE factor
+Rule 22    term -> term TIMES factor
+Rule 23    term -> term DIVIDE factor
 Rule 24    term -> factor
 Rule 25    factor -> NUMBER
 Rule 26    factor -> NAME
-Rule 27    factor -> PLUS factor
-Rule 28    factor -> MINUS factor
-Rule 29    factor -> LPAREN expression RPAREN
+Rule 27    factor -> LPAREN expression RPAREN
 
 Terminals, with rules where they appear
 
 ASSIGN               : 8 9
-DECLARATION          : 
 DIVIDE               : 23
 ELSE                 : 11
-END_OF_LINE          : 
+END_OF_LINE          : 4 5
 EQUALS               : 12
-FUNCTION             : 
+ERROR                : 
 GREATEREQUAL         : 17
 GREATERTHAN          : 15
 IF                   : 10 11
-KEYS                 : 
 LBRACE               : 18
 LESSEQUAL            : 16
 LESSTHAN             : 14
-LPAREN               : 29
-MINUS                : 20 28
+LPAREN               : 10 11 27
+MINUS                : 20
 NAME                 : 7 8 9 26
 NOTEQUALS            : 13
 NUMBER               : 25
-PLUS                 : 19 27
+PLUS                 : 19
 RBRACE               : 18
-RELATION             : 
-RPAREN               : 29
+RPAREN               : 10 11 27
 TIMES                : 22
 VAR                  : 7 8
 error                : 
 
 Nonterminals, with rules where they appear
 
-assignment           : 1
+assignment           : 4
 block                : 10 11 11
 condition            : 10 11
-declaration          : 2
-expression           : 4 8 9 12 12 13 13 14 14 15 15 16 16 17 17 29
-factor               : 22 22 23 23 24 27 28
-if_statement         : 3
-statement            : 5 6 0
-statement_list       : 6 18
-term                 : 19 19 20 20 21
+declaration          : 5
+expression           : 8 9 12 12 13 13 14 14 15 15 16 16 17 17 19 20 27
+factor               : 22 23 24
+if_statement         : 6
+program              : 0
+statement            : 2 3
+statement_list       : 1 3 18
+term                 : 19 20 21 22 23
 
 Parsing method: LALR
 
 state 0
 
-    (0) S' -> . statement
-    (1) statement -> . assignment
-    (2) statement -> . declaration
-    (3) statement -> . if_statement
-    (4) statement -> . expression
+    (0) S' -> . program
+    (1) program -> . statement_list
+    (2) statement_list -> . statement
+    (3) statement_list -> . statement_list statement
+    (4) statement -> . assignment END_OF_LINE
+    (5) statement -> . declaration END_OF_LINE
+    (6) statement -> . if_statement
     (9) assignment -> . NAME ASSIGN expression
     (7) declaration -> . VAR NAME
     (8) declaration -> . VAR NAME ASSIGN expression
-    (10) if_statement -> . IF condition block
-    (11) if_statement -> . IF condition block ELSE block
-    (19) expression -> . term PLUS term
-    (20) expression -> . term MINUS term
-    (21) expression -> . term
-    (22) term -> . factor TIMES factor
-    (23) term -> . factor DIVIDE factor
-    (24) term -> . factor
-    (25) factor -> . NUMBER
-    (26) factor -> . NAME
-    (27) factor -> . PLUS factor
-    (28) factor -> . MINUS factor
-    (29) factor -> . LPAREN expression RPAREN
+    (10) if_statement -> . IF LPAREN condition RPAREN block
+    (11) if_statement -> . IF LPAREN condition RPAREN block ELSE block
 
-    NAME            shift and go to state 6
-    VAR             shift and go to state 7
-    IF              shift and go to state 8
-    NUMBER          shift and go to state 13
-    PLUS            shift and go to state 10
-    MINUS           shift and go to state 11
-    LPAREN          shift and go to state 14
+    NAME            shift and go to state 7
+    VAR             shift and go to state 8
+    IF              shift and go to state 9
 
-    statement                      shift and go to state 1
-    assignment                     shift and go to state 2
-    declaration                    shift and go to state 3
-    if_statement                   shift and go to state 4
-    expression                     shift and go to state 5
-    term                           shift and go to state 9
-    factor                         shift and go to state 12
+    program                        shift and go to state 1
+    statement_list                 shift and go to state 2
+    statement                      shift and go to state 3
+    assignment                     shift and go to state 4
+    declaration                    shift and go to state 5
+    if_statement                   shift and go to state 6
 
 state 1
 
-    (0) S' -> statement .
+    (0) S' -> program .
 
 
 
 state 2
 
-    (1) statement -> assignment .
+    (1) program -> statement_list .
+    (3) statement_list -> statement_list . statement
+    (4) statement -> . assignment END_OF_LINE
+    (5) statement -> . declaration END_OF_LINE
+    (6) statement -> . if_statement
+    (9) assignment -> . NAME ASSIGN expression
+    (7) declaration -> . VAR NAME
+    (8) declaration -> . VAR NAME ASSIGN expression
+    (10) if_statement -> . IF LPAREN condition RPAREN block
+    (11) if_statement -> . IF LPAREN condition RPAREN block ELSE block
 
-    $end            reduce using rule 1 (statement -> assignment .)
-    RBRACE          reduce using rule 1 (statement -> assignment .)
-    NAME            reduce using rule 1 (statement -> assignment .)
-    VAR             reduce using rule 1 (statement -> assignment .)
-    IF              reduce using rule 1 (statement -> assignment .)
-    NUMBER          reduce using rule 1 (statement -> assignment .)
-    PLUS            reduce using rule 1 (statement -> assignment .)
-    MINUS           reduce using rule 1 (statement -> assignment .)
-    LPAREN          reduce using rule 1 (statement -> assignment .)
+    $end            reduce using rule 1 (program -> statement_list .)
+    NAME            shift and go to state 7
+    VAR             shift and go to state 8
+    IF              shift and go to state 9
 
+    statement                      shift and go to state 10
+    assignment                     shift and go to state 4
+    declaration                    shift and go to state 5
+    if_statement                   shift and go to state 6
 
 state 3
 
-    (2) statement -> declaration .
+    (2) statement_list -> statement .
 
-    $end            reduce using rule 2 (statement -> declaration .)
-    RBRACE          reduce using rule 2 (statement -> declaration .)
-    NAME            reduce using rule 2 (statement -> declaration .)
-    VAR             reduce using rule 2 (statement -> declaration .)
-    IF              reduce using rule 2 (statement -> declaration .)
-    NUMBER          reduce using rule 2 (statement -> declaration .)
-    PLUS            reduce using rule 2 (statement -> declaration .)
-    MINUS           reduce using rule 2 (statement -> declaration .)
-    LPAREN          reduce using rule 2 (statement -> declaration .)
+    NAME            reduce using rule 2 (statement_list -> statement .)
+    VAR             reduce using rule 2 (statement_list -> statement .)
+    IF              reduce using rule 2 (statement_list -> statement .)
+    $end            reduce using rule 2 (statement_list -> statement .)
+    RBRACE          reduce using rule 2 (statement_list -> statement .)
 
 
 state 4
 
-    (3) statement -> if_statement .
+    (4) statement -> assignment . END_OF_LINE
 
-    $end            reduce using rule 3 (statement -> if_statement .)
-    RBRACE          reduce using rule 3 (statement -> if_statement .)
-    NAME            reduce using rule 3 (statement -> if_statement .)
-    VAR             reduce using rule 3 (statement -> if_statement .)
-    IF              reduce using rule 3 (statement -> if_statement .)
-    NUMBER          reduce using rule 3 (statement -> if_statement .)
-    PLUS            reduce using rule 3 (statement -> if_statement .)
-    MINUS           reduce using rule 3 (statement -> if_statement .)
-    LPAREN          reduce using rule 3 (statement -> if_statement .)
+    END_OF_LINE     shift and go to state 11
 
 
 state 5
 
-    (4) statement -> expression .
+    (5) statement -> declaration . END_OF_LINE
 
-    $end            reduce using rule 4 (statement -> expression .)
-    RBRACE          reduce using rule 4 (statement -> expression .)
-    NAME            reduce using rule 4 (statement -> expression .)
-    VAR             reduce using rule 4 (statement -> expression .)
-    IF              reduce using rule 4 (statement -> expression .)
-    NUMBER          reduce using rule 4 (statement -> expression .)
-    PLUS            reduce using rule 4 (statement -> expression .)
-    MINUS           reduce using rule 4 (statement -> expression .)
-    LPAREN          reduce using rule 4 (statement -> expression .)
+    END_OF_LINE     shift and go to state 12
 
 
 state 6
 
-    (9) assignment -> NAME . ASSIGN expression
-    (26) factor -> NAME .
+    (6) statement -> if_statement .
 
-    ASSIGN          shift and go to state 15
-    TIMES           reduce using rule 26 (factor -> NAME .)
-    DIVIDE          reduce using rule 26 (factor -> NAME .)
-    PLUS            reduce using rule 26 (factor -> NAME .)
-    MINUS           reduce using rule 26 (factor -> NAME .)
-    $end            reduce using rule 26 (factor -> NAME .)
-    RBRACE          reduce using rule 26 (factor -> NAME .)
-    NAME            reduce using rule 26 (factor -> NAME .)
-    VAR             reduce using rule 26 (factor -> NAME .)
-    IF              reduce using rule 26 (factor -> NAME .)
-    NUMBER          reduce using rule 26 (factor -> NAME .)
-    LPAREN          reduce using rule 26 (factor -> NAME .)
+    NAME            reduce using rule 6 (statement -> if_statement .)
+    VAR             reduce using rule 6 (statement -> if_statement .)
+    IF              reduce using rule 6 (statement -> if_statement .)
+    $end            reduce using rule 6 (statement -> if_statement .)
+    RBRACE          reduce using rule 6 (statement -> if_statement .)
 
 
 state 7
 
-    (7) declaration -> VAR . NAME
-    (8) declaration -> VAR . NAME ASSIGN expression
+    (9) assignment -> NAME . ASSIGN expression
 
-    NAME            shift and go to state 16
+    ASSIGN          shift and go to state 13
 
 
 state 8
 
-    (10) if_statement -> IF . condition block
-    (11) if_statement -> IF . condition block ELSE block
+    (7) declaration -> VAR . NAME
+    (8) declaration -> VAR . NAME ASSIGN expression
+
+    NAME            shift and go to state 14
+
+
+state 9
+
+    (10) if_statement -> IF . LPAREN condition RPAREN block
+    (11) if_statement -> IF . LPAREN condition RPAREN block ELSE block
+
+    LPAREN          shift and go to state 15
+
+
+state 10
+
+    (3) statement_list -> statement_list statement .
+
+    NAME            reduce using rule 3 (statement_list -> statement_list statement .)
+    VAR             reduce using rule 3 (statement_list -> statement_list statement .)
+    IF              reduce using rule 3 (statement_list -> statement_list statement .)
+    $end            reduce using rule 3 (statement_list -> statement_list statement .)
+    RBRACE          reduce using rule 3 (statement_list -> statement_list statement .)
+
+
+state 11
+
+    (4) statement -> assignment END_OF_LINE .
+
+    NAME            reduce using rule 4 (statement -> assignment END_OF_LINE .)
+    VAR             reduce using rule 4 (statement -> assignment END_OF_LINE .)
+    IF              reduce using rule 4 (statement -> assignment END_OF_LINE .)
+    $end            reduce using rule 4 (statement -> assignment END_OF_LINE .)
+    RBRACE          reduce using rule 4 (statement -> assignment END_OF_LINE .)
+
+
+state 12
+
+    (5) statement -> declaration END_OF_LINE .
+
+    NAME            reduce using rule 5 (statement -> declaration END_OF_LINE .)
+    VAR             reduce using rule 5 (statement -> declaration END_OF_LINE .)
+    IF              reduce using rule 5 (statement -> declaration END_OF_LINE .)
+    $end            reduce using rule 5 (statement -> declaration END_OF_LINE .)
+    RBRACE          reduce using rule 5 (statement -> declaration END_OF_LINE .)
+
+
+state 13
+
+    (9) assignment -> NAME ASSIGN . expression
+    (19) expression -> . expression PLUS term
+    (20) expression -> . expression MINUS term
+    (21) expression -> . term
+    (22) term -> . term TIMES factor
+    (23) term -> . term DIVIDE factor
+    (24) term -> . factor
+    (25) factor -> . NUMBER
+    (26) factor -> . NAME
+    (27) factor -> . LPAREN expression RPAREN
+
+    NUMBER          shift and go to state 20
+    NAME            shift and go to state 16
+    LPAREN          shift and go to state 21
+
+    expression                     shift and go to state 17
+    term                           shift and go to state 18
+    factor                         shift and go to state 19
+
+state 14
+
+    (7) declaration -> VAR NAME .
+    (8) declaration -> VAR NAME . ASSIGN expression
+
+    END_OF_LINE     reduce using rule 7 (declaration -> VAR NAME .)
+    ASSIGN          shift and go to state 22
+
+
+state 15
+
+    (10) if_statement -> IF LPAREN . condition RPAREN block
+    (11) if_statement -> IF LPAREN . condition RPAREN block ELSE block
     (12) condition -> . expression EQUALS expression
     (13) condition -> . expression NOTEQUALS expression
     (14) condition -> . expression LESSTHAN expression
     (15) condition -> . expression GREATERTHAN expression
     (16) condition -> . expression LESSEQUAL expression
     (17) condition -> . expression GREATEREQUAL expression
-    (19) expression -> . term PLUS term
-    (20) expression -> . term MINUS term
+    (19) expression -> . expression PLUS term
+    (20) expression -> . expression MINUS term
     (21) expression -> . term
-    (22) term -> . factor TIMES factor
-    (23) term -> . factor DIVIDE factor
+    (22) term -> . term TIMES factor
+    (23) term -> . term DIVIDE factor
     (24) term -> . factor
     (25) factor -> . NUMBER
     (26) factor -> . NAME
-    (27) factor -> . PLUS factor
-    (28) factor -> . MINUS factor
-    (29) factor -> . LPAREN expression RPAREN
+    (27) factor -> . LPAREN expression RPAREN
 
-    NUMBER          shift and go to state 13
-    NAME            shift and go to state 19
-    PLUS            shift and go to state 10
-    MINUS           shift and go to state 11
-    LPAREN          shift and go to state 14
+    NUMBER          shift and go to state 20
+    NAME            shift and go to state 16
+    LPAREN          shift and go to state 21
 
-    condition                      shift and go to state 17
-    expression                     shift and go to state 18
-    term                           shift and go to state 9
-    factor                         shift and go to state 12
+    condition                      shift and go to state 23
+    expression                     shift and go to state 24
+    term                           shift and go to state 18
+    factor                         shift and go to state 19
 
-state 9
+state 16
 
-    (19) expression -> term . PLUS term
-    (20) expression -> term . MINUS term
+    (26) factor -> NAME .
+
+    TIMES           reduce using rule 26 (factor -> NAME .)
+    DIVIDE          reduce using rule 26 (factor -> NAME .)
+    PLUS            reduce using rule 26 (factor -> NAME .)
+    MINUS           reduce using rule 26 (factor -> NAME .)
+    END_OF_LINE     reduce using rule 26 (factor -> NAME .)
+    EQUALS          reduce using rule 26 (factor -> NAME .)
+    NOTEQUALS       reduce using rule 26 (factor -> NAME .)
+    LESSTHAN        reduce using rule 26 (factor -> NAME .)
+    GREATERTHAN     reduce using rule 26 (factor -> NAME .)
+    LESSEQUAL       reduce using rule 26 (factor -> NAME .)
+    GREATEREQUAL    reduce using rule 26 (factor -> NAME .)
+    RPAREN          reduce using rule 26 (factor -> NAME .)
+
+
+state 17
+
+    (9) assignment -> NAME ASSIGN expression .
+    (19) expression -> expression . PLUS term
+    (20) expression -> expression . MINUS term
+
+    END_OF_LINE     reduce using rule 9 (assignment -> NAME ASSIGN expression .)
+    PLUS            shift and go to state 25
+    MINUS           shift and go to state 26
+
+
+state 18
+
     (21) expression -> term .
+    (22) term -> term . TIMES factor
+    (23) term -> term . DIVIDE factor
 
-  ! shift/reduce conflict for PLUS resolved as shift
-  ! shift/reduce conflict for MINUS resolved as shift
-    PLUS            shift and go to state 20
-    MINUS           shift and go to state 21
-    $end            reduce using rule 21 (expression -> term .)
+    PLUS            reduce using rule 21 (expression -> term .)
+    MINUS           reduce using rule 21 (expression -> term .)
+    END_OF_LINE     reduce using rule 21 (expression -> term .)
     EQUALS          reduce using rule 21 (expression -> term .)
     NOTEQUALS       reduce using rule 21 (expression -> term .)
     LESSTHAN        reduce using rule 21 (expression -> term .)
@@ -269,63 +328,19 @@ state 9
     LESSEQUAL       reduce using rule 21 (expression -> term .)
     GREATEREQUAL    reduce using rule 21 (expression -> term .)
     RPAREN          reduce using rule 21 (expression -> term .)
-    RBRACE          reduce using rule 21 (expression -> term .)
-    NAME            reduce using rule 21 (expression -> term .)
-    VAR             reduce using rule 21 (expression -> term .)
-    IF              reduce using rule 21 (expression -> term .)
-    NUMBER          reduce using rule 21 (expression -> term .)
-    LPAREN          reduce using rule 21 (expression -> term .)
-    LBRACE          reduce using rule 21 (expression -> term .)
-
-  ! PLUS            [ reduce using rule 21 (expression -> term .) ]
-  ! MINUS           [ reduce using rule 21 (expression -> term .) ]
+    TIMES           shift and go to state 27
+    DIVIDE          shift and go to state 28
 
 
-state 10
+state 19
 
-    (27) factor -> PLUS . factor
-    (25) factor -> . NUMBER
-    (26) factor -> . NAME
-    (27) factor -> . PLUS factor
-    (28) factor -> . MINUS factor
-    (29) factor -> . LPAREN expression RPAREN
-
-    NUMBER          shift and go to state 13
-    NAME            shift and go to state 19
-    PLUS            shift and go to state 10
-    MINUS           shift and go to state 11
-    LPAREN          shift and go to state 14
-
-    factor                         shift and go to state 22
-
-state 11
-
-    (28) factor -> MINUS . factor
-    (25) factor -> . NUMBER
-    (26) factor -> . NAME
-    (27) factor -> . PLUS factor
-    (28) factor -> . MINUS factor
-    (29) factor -> . LPAREN expression RPAREN
-
-    NUMBER          shift and go to state 13
-    NAME            shift and go to state 19
-    PLUS            shift and go to state 10
-    MINUS           shift and go to state 11
-    LPAREN          shift and go to state 14
-
-    factor                         shift and go to state 23
-
-state 12
-
-    (22) term -> factor . TIMES factor
-    (23) term -> factor . DIVIDE factor
     (24) term -> factor .
 
-    TIMES           shift and go to state 24
-    DIVIDE          shift and go to state 25
+    TIMES           reduce using rule 24 (term -> factor .)
+    DIVIDE          reduce using rule 24 (term -> factor .)
     PLUS            reduce using rule 24 (term -> factor .)
     MINUS           reduce using rule 24 (term -> factor .)
-    $end            reduce using rule 24 (term -> factor .)
+    END_OF_LINE     reduce using rule 24 (term -> factor .)
     EQUALS          reduce using rule 24 (term -> factor .)
     NOTEQUALS       reduce using rule 24 (term -> factor .)
     LESSTHAN        reduce using rule 24 (term -> factor .)
@@ -333,16 +348,9 @@ state 12
     LESSEQUAL       reduce using rule 24 (term -> factor .)
     GREATEREQUAL    reduce using rule 24 (term -> factor .)
     RPAREN          reduce using rule 24 (term -> factor .)
-    RBRACE          reduce using rule 24 (term -> factor .)
-    NAME            reduce using rule 24 (term -> factor .)
-    VAR             reduce using rule 24 (term -> factor .)
-    IF              reduce using rule 24 (term -> factor .)
-    NUMBER          reduce using rule 24 (term -> factor .)
-    LPAREN          reduce using rule 24 (term -> factor .)
-    LBRACE          reduce using rule 24 (term -> factor .)
 
 
-state 13
+state 20
 
     (25) factor -> NUMBER .
 
@@ -350,7 +358,7 @@ state 13
     DIVIDE          reduce using rule 25 (factor -> NUMBER .)
     PLUS            reduce using rule 25 (factor -> NUMBER .)
     MINUS           reduce using rule 25 (factor -> NUMBER .)
-    $end            reduce using rule 25 (factor -> NUMBER .)
+    END_OF_LINE     reduce using rule 25 (factor -> NUMBER .)
     EQUALS          reduce using rule 25 (factor -> NUMBER .)
     NOTEQUALS       reduce using rule 25 (factor -> NUMBER .)
     LESSTHAN        reduce using rule 25 (factor -> NUMBER .)
@@ -358,93 +366,59 @@ state 13
     LESSEQUAL       reduce using rule 25 (factor -> NUMBER .)
     GREATEREQUAL    reduce using rule 25 (factor -> NUMBER .)
     RPAREN          reduce using rule 25 (factor -> NUMBER .)
-    RBRACE          reduce using rule 25 (factor -> NUMBER .)
-    NAME            reduce using rule 25 (factor -> NUMBER .)
-    VAR             reduce using rule 25 (factor -> NUMBER .)
-    IF              reduce using rule 25 (factor -> NUMBER .)
-    NUMBER          reduce using rule 25 (factor -> NUMBER .)
-    LPAREN          reduce using rule 25 (factor -> NUMBER .)
-    LBRACE          reduce using rule 25 (factor -> NUMBER .)
 
 
-state 14
+state 21
 
-    (29) factor -> LPAREN . expression RPAREN
-    (19) expression -> . term PLUS term
-    (20) expression -> . term MINUS term
+    (27) factor -> LPAREN . expression RPAREN
+    (19) expression -> . expression PLUS term
+    (20) expression -> . expression MINUS term
     (21) expression -> . term
-    (22) term -> . factor TIMES factor
-    (23) term -> . factor DIVIDE factor
+    (22) term -> . term TIMES factor
+    (23) term -> . term DIVIDE factor
     (24) term -> . factor
     (25) factor -> . NUMBER
     (26) factor -> . NAME
-    (27) factor -> . PLUS factor
-    (28) factor -> . MINUS factor
-    (29) factor -> . LPAREN expression RPAREN
+    (27) factor -> . LPAREN expression RPAREN
 
-    NUMBER          shift and go to state 13
-    NAME            shift and go to state 19
-    PLUS            shift and go to state 10
-    MINUS           shift and go to state 11
-    LPAREN          shift and go to state 14
+    NUMBER          shift and go to state 20
+    NAME            shift and go to state 16
+    LPAREN          shift and go to state 21
 
-    expression                     shift and go to state 26
-    term                           shift and go to state 9
-    factor                         shift and go to state 12
+    expression                     shift and go to state 29
+    term                           shift and go to state 18
+    factor                         shift and go to state 19
 
-state 15
+state 22
 
-    (9) assignment -> NAME ASSIGN . expression
-    (19) expression -> . term PLUS term
-    (20) expression -> . term MINUS term
+    (8) declaration -> VAR NAME ASSIGN . expression
+    (19) expression -> . expression PLUS term
+    (20) expression -> . expression MINUS term
     (21) expression -> . term
-    (22) term -> . factor TIMES factor
-    (23) term -> . factor DIVIDE factor
+    (22) term -> . term TIMES factor
+    (23) term -> . term DIVIDE factor
     (24) term -> . factor
     (25) factor -> . NUMBER
     (26) factor -> . NAME
-    (27) factor -> . PLUS factor
-    (28) factor -> . MINUS factor
-    (29) factor -> . LPAREN expression RPAREN
+    (27) factor -> . LPAREN expression RPAREN
 
-    NUMBER          shift and go to state 13
-    NAME            shift and go to state 19
-    PLUS            shift and go to state 10
-    MINUS           shift and go to state 11
-    LPAREN          shift and go to state 14
+    NUMBER          shift and go to state 20
+    NAME            shift and go to state 16
+    LPAREN          shift and go to state 21
 
-    expression                     shift and go to state 27
-    term                           shift and go to state 9
-    factor                         shift and go to state 12
+    expression                     shift and go to state 30
+    term                           shift and go to state 18
+    factor                         shift and go to state 19
 
-state 16
+state 23
 
-    (7) declaration -> VAR NAME .
-    (8) declaration -> VAR NAME . ASSIGN expression
+    (10) if_statement -> IF LPAREN condition . RPAREN block
+    (11) if_statement -> IF LPAREN condition . RPAREN block ELSE block
 
-    $end            reduce using rule 7 (declaration -> VAR NAME .)
-    RBRACE          reduce using rule 7 (declaration -> VAR NAME .)
-    NAME            reduce using rule 7 (declaration -> VAR NAME .)
-    VAR             reduce using rule 7 (declaration -> VAR NAME .)
-    IF              reduce using rule 7 (declaration -> VAR NAME .)
-    NUMBER          reduce using rule 7 (declaration -> VAR NAME .)
-    PLUS            reduce using rule 7 (declaration -> VAR NAME .)
-    MINUS           reduce using rule 7 (declaration -> VAR NAME .)
-    LPAREN          reduce using rule 7 (declaration -> VAR NAME .)
-    ASSIGN          shift and go to state 28
+    RPAREN          shift and go to state 31
 
 
-state 17
-
-    (10) if_statement -> IF condition . block
-    (11) if_statement -> IF condition . block ELSE block
-    (18) block -> . LBRACE statement_list RBRACE
-
-    LBRACE          shift and go to state 30
-
-    block                          shift and go to state 29
-
-state 18
+state 24
 
     (12) condition -> expression . EQUALS expression
     (13) condition -> expression . NOTEQUALS expression
@@ -452,708 +426,485 @@ state 18
     (15) condition -> expression . GREATERTHAN expression
     (16) condition -> expression . LESSEQUAL expression
     (17) condition -> expression . GREATEREQUAL expression
+    (19) expression -> expression . PLUS term
+    (20) expression -> expression . MINUS term
 
-    EQUALS          shift and go to state 31
-    NOTEQUALS       shift and go to state 32
-    LESSTHAN        shift and go to state 33
-    GREATERTHAN     shift and go to state 34
-    LESSEQUAL       shift and go to state 35
-    GREATEREQUAL    shift and go to state 36
+    EQUALS          shift and go to state 32
+    NOTEQUALS       shift and go to state 33
+    LESSTHAN        shift and go to state 34
+    GREATERTHAN     shift and go to state 35
+    LESSEQUAL       shift and go to state 36
+    GREATEREQUAL    shift and go to state 37
+    PLUS            shift and go to state 25
+    MINUS           shift and go to state 26
 
-
-state 19
-
-    (26) factor -> NAME .
-
-    TIMES           reduce using rule 26 (factor -> NAME .)
-    DIVIDE          reduce using rule 26 (factor -> NAME .)
-    PLUS            reduce using rule 26 (factor -> NAME .)
-    MINUS           reduce using rule 26 (factor -> NAME .)
-    EQUALS          reduce using rule 26 (factor -> NAME .)
-    NOTEQUALS       reduce using rule 26 (factor -> NAME .)
-    LESSTHAN        reduce using rule 26 (factor -> NAME .)
-    GREATERTHAN     reduce using rule 26 (factor -> NAME .)
-    LESSEQUAL       reduce using rule 26 (factor -> NAME .)
-    GREATEREQUAL    reduce using rule 26 (factor -> NAME .)
-    $end            reduce using rule 26 (factor -> NAME .)
-    RPAREN          reduce using rule 26 (factor -> NAME .)
-    RBRACE          reduce using rule 26 (factor -> NAME .)
-    NAME            reduce using rule 26 (factor -> NAME .)
-    VAR             reduce using rule 26 (factor -> NAME .)
-    IF              reduce using rule 26 (factor -> NAME .)
-    NUMBER          reduce using rule 26 (factor -> NAME .)
-    LPAREN          reduce using rule 26 (factor -> NAME .)
-    LBRACE          reduce using rule 26 (factor -> NAME .)
-
-
-state 20
-
-    (19) expression -> term PLUS . term
-    (22) term -> . factor TIMES factor
-    (23) term -> . factor DIVIDE factor
-    (24) term -> . factor
-    (25) factor -> . NUMBER
-    (26) factor -> . NAME
-    (27) factor -> . PLUS factor
-    (28) factor -> . MINUS factor
-    (29) factor -> . LPAREN expression RPAREN
-
-    NUMBER          shift and go to state 13
-    NAME            shift and go to state 19
-    PLUS            shift and go to state 10
-    MINUS           shift and go to state 11
-    LPAREN          shift and go to state 14
-
-    term                           shift and go to state 37
-    factor                         shift and go to state 12
-
-state 21
-
-    (20) expression -> term MINUS . term
-    (22) term -> . factor TIMES factor
-    (23) term -> . factor DIVIDE factor
-    (24) term -> . factor
-    (25) factor -> . NUMBER
-    (26) factor -> . NAME
-    (27) factor -> . PLUS factor
-    (28) factor -> . MINUS factor
-    (29) factor -> . LPAREN expression RPAREN
-
-    NUMBER          shift and go to state 13
-    NAME            shift and go to state 19
-    PLUS            shift and go to state 10
-    MINUS           shift and go to state 11
-    LPAREN          shift and go to state 14
-
-    term                           shift and go to state 38
-    factor                         shift and go to state 12
-
-state 22
-
-    (27) factor -> PLUS factor .
-
-    TIMES           reduce using rule 27 (factor -> PLUS factor .)
-    DIVIDE          reduce using rule 27 (factor -> PLUS factor .)
-    PLUS            reduce using rule 27 (factor -> PLUS factor .)
-    MINUS           reduce using rule 27 (factor -> PLUS factor .)
-    $end            reduce using rule 27 (factor -> PLUS factor .)
-    EQUALS          reduce using rule 27 (factor -> PLUS factor .)
-    NOTEQUALS       reduce using rule 27 (factor -> PLUS factor .)
-    LESSTHAN        reduce using rule 27 (factor -> PLUS factor .)
-    GREATERTHAN     reduce using rule 27 (factor -> PLUS factor .)
-    LESSEQUAL       reduce using rule 27 (factor -> PLUS factor .)
-    GREATEREQUAL    reduce using rule 27 (factor -> PLUS factor .)
-    RPAREN          reduce using rule 27 (factor -> PLUS factor .)
-    RBRACE          reduce using rule 27 (factor -> PLUS factor .)
-    NAME            reduce using rule 27 (factor -> PLUS factor .)
-    VAR             reduce using rule 27 (factor -> PLUS factor .)
-    IF              reduce using rule 27 (factor -> PLUS factor .)
-    NUMBER          reduce using rule 27 (factor -> PLUS factor .)
-    LPAREN          reduce using rule 27 (factor -> PLUS factor .)
-    LBRACE          reduce using rule 27 (factor -> PLUS factor .)
-
-
-state 23
-
-    (28) factor -> MINUS factor .
-
-    TIMES           reduce using rule 28 (factor -> MINUS factor .)
-    DIVIDE          reduce using rule 28 (factor -> MINUS factor .)
-    PLUS            reduce using rule 28 (factor -> MINUS factor .)
-    MINUS           reduce using rule 28 (factor -> MINUS factor .)
-    $end            reduce using rule 28 (factor -> MINUS factor .)
-    EQUALS          reduce using rule 28 (factor -> MINUS factor .)
-    NOTEQUALS       reduce using rule 28 (factor -> MINUS factor .)
-    LESSTHAN        reduce using rule 28 (factor -> MINUS factor .)
-    GREATERTHAN     reduce using rule 28 (factor -> MINUS factor .)
-    LESSEQUAL       reduce using rule 28 (factor -> MINUS factor .)
-    GREATEREQUAL    reduce using rule 28 (factor -> MINUS factor .)
-    RPAREN          reduce using rule 28 (factor -> MINUS factor .)
-    RBRACE          reduce using rule 28 (factor -> MINUS factor .)
-    NAME            reduce using rule 28 (factor -> MINUS factor .)
-    VAR             reduce using rule 28 (factor -> MINUS factor .)
-    IF              reduce using rule 28 (factor -> MINUS factor .)
-    NUMBER          reduce using rule 28 (factor -> MINUS factor .)
-    LPAREN          reduce using rule 28 (factor -> MINUS factor .)
-    LBRACE          reduce using rule 28 (factor -> MINUS factor .)
-
-
-state 24
-
-    (22) term -> factor TIMES . factor
-    (25) factor -> . NUMBER
-    (26) factor -> . NAME
-    (27) factor -> . PLUS factor
-    (28) factor -> . MINUS factor
-    (29) factor -> . LPAREN expression RPAREN
-
-    NUMBER          shift and go to state 13
-    NAME            shift and go to state 19
-    PLUS            shift and go to state 10
-    MINUS           shift and go to state 11
-    LPAREN          shift and go to state 14
-
-    factor                         shift and go to state 39
 
 state 25
 
-    (23) term -> factor DIVIDE . factor
-    (25) factor -> . NUMBER
-    (26) factor -> . NAME
-    (27) factor -> . PLUS factor
-    (28) factor -> . MINUS factor
-    (29) factor -> . LPAREN expression RPAREN
-
-    NUMBER          shift and go to state 13
-    NAME            shift and go to state 19
-    PLUS            shift and go to state 10
-    MINUS           shift and go to state 11
-    LPAREN          shift and go to state 14
-
-    factor                         shift and go to state 40
-
-state 26
-
-    (29) factor -> LPAREN expression . RPAREN
-
-    RPAREN          shift and go to state 41
-
-
-state 27
-
-    (9) assignment -> NAME ASSIGN expression .
-
-    $end            reduce using rule 9 (assignment -> NAME ASSIGN expression .)
-    RBRACE          reduce using rule 9 (assignment -> NAME ASSIGN expression .)
-    NAME            reduce using rule 9 (assignment -> NAME ASSIGN expression .)
-    VAR             reduce using rule 9 (assignment -> NAME ASSIGN expression .)
-    IF              reduce using rule 9 (assignment -> NAME ASSIGN expression .)
-    NUMBER          reduce using rule 9 (assignment -> NAME ASSIGN expression .)
-    PLUS            reduce using rule 9 (assignment -> NAME ASSIGN expression .)
-    MINUS           reduce using rule 9 (assignment -> NAME ASSIGN expression .)
-    LPAREN          reduce using rule 9 (assignment -> NAME ASSIGN expression .)
-
-
-state 28
-
-    (8) declaration -> VAR NAME ASSIGN . expression
-    (19) expression -> . term PLUS term
-    (20) expression -> . term MINUS term
-    (21) expression -> . term
-    (22) term -> . factor TIMES factor
-    (23) term -> . factor DIVIDE factor
+    (19) expression -> expression PLUS . term
+    (22) term -> . term TIMES factor
+    (23) term -> . term DIVIDE factor
     (24) term -> . factor
     (25) factor -> . NUMBER
     (26) factor -> . NAME
-    (27) factor -> . PLUS factor
-    (28) factor -> . MINUS factor
-    (29) factor -> . LPAREN expression RPAREN
+    (27) factor -> . LPAREN expression RPAREN
 
-    NUMBER          shift and go to state 13
-    NAME            shift and go to state 19
-    PLUS            shift and go to state 10
-    MINUS           shift and go to state 11
-    LPAREN          shift and go to state 14
+    NUMBER          shift and go to state 20
+    NAME            shift and go to state 16
+    LPAREN          shift and go to state 21
 
-    expression                     shift and go to state 42
-    term                           shift and go to state 9
-    factor                         shift and go to state 12
+    term                           shift and go to state 38
+    factor                         shift and go to state 19
+
+state 26
+
+    (20) expression -> expression MINUS . term
+    (22) term -> . term TIMES factor
+    (23) term -> . term DIVIDE factor
+    (24) term -> . factor
+    (25) factor -> . NUMBER
+    (26) factor -> . NAME
+    (27) factor -> . LPAREN expression RPAREN
+
+    NUMBER          shift and go to state 20
+    NAME            shift and go to state 16
+    LPAREN          shift and go to state 21
+
+    term                           shift and go to state 39
+    factor                         shift and go to state 19
+
+state 27
+
+    (22) term -> term TIMES . factor
+    (25) factor -> . NUMBER
+    (26) factor -> . NAME
+    (27) factor -> . LPAREN expression RPAREN
+
+    NUMBER          shift and go to state 20
+    NAME            shift and go to state 16
+    LPAREN          shift and go to state 21
+
+    factor                         shift and go to state 40
+
+state 28
+
+    (23) term -> term DIVIDE . factor
+    (25) factor -> . NUMBER
+    (26) factor -> . NAME
+    (27) factor -> . LPAREN expression RPAREN
+
+    NUMBER          shift and go to state 20
+    NAME            shift and go to state 16
+    LPAREN          shift and go to state 21
+
+    factor                         shift and go to state 41
 
 state 29
 
-    (10) if_statement -> IF condition block .
-    (11) if_statement -> IF condition block . ELSE block
+    (27) factor -> LPAREN expression . RPAREN
+    (19) expression -> expression . PLUS term
+    (20) expression -> expression . MINUS term
 
-    $end            reduce using rule 10 (if_statement -> IF condition block .)
-    RBRACE          reduce using rule 10 (if_statement -> IF condition block .)
-    NAME            reduce using rule 10 (if_statement -> IF condition block .)
-    VAR             reduce using rule 10 (if_statement -> IF condition block .)
-    IF              reduce using rule 10 (if_statement -> IF condition block .)
-    NUMBER          reduce using rule 10 (if_statement -> IF condition block .)
-    PLUS            reduce using rule 10 (if_statement -> IF condition block .)
-    MINUS           reduce using rule 10 (if_statement -> IF condition block .)
-    LPAREN          reduce using rule 10 (if_statement -> IF condition block .)
-    ELSE            shift and go to state 43
+    RPAREN          shift and go to state 42
+    PLUS            shift and go to state 25
+    MINUS           shift and go to state 26
 
 
 state 30
 
-    (18) block -> LBRACE . statement_list RBRACE
-    (5) statement_list -> . statement
-    (6) statement_list -> . statement_list statement
-    (1) statement -> . assignment
-    (2) statement -> . declaration
-    (3) statement -> . if_statement
-    (4) statement -> . expression
-    (9) assignment -> . NAME ASSIGN expression
-    (7) declaration -> . VAR NAME
-    (8) declaration -> . VAR NAME ASSIGN expression
-    (10) if_statement -> . IF condition block
-    (11) if_statement -> . IF condition block ELSE block
-    (19) expression -> . term PLUS term
-    (20) expression -> . term MINUS term
-    (21) expression -> . term
-    (22) term -> . factor TIMES factor
-    (23) term -> . factor DIVIDE factor
-    (24) term -> . factor
-    (25) factor -> . NUMBER
-    (26) factor -> . NAME
-    (27) factor -> . PLUS factor
-    (28) factor -> . MINUS factor
-    (29) factor -> . LPAREN expression RPAREN
+    (8) declaration -> VAR NAME ASSIGN expression .
+    (19) expression -> expression . PLUS term
+    (20) expression -> expression . MINUS term
 
-    NAME            shift and go to state 6
-    VAR             shift and go to state 7
-    IF              shift and go to state 8
-    NUMBER          shift and go to state 13
-    PLUS            shift and go to state 10
-    MINUS           shift and go to state 11
-    LPAREN          shift and go to state 14
+    END_OF_LINE     reduce using rule 8 (declaration -> VAR NAME ASSIGN expression .)
+    PLUS            shift and go to state 25
+    MINUS           shift and go to state 26
 
-    statement_list                 shift and go to state 44
-    statement                      shift and go to state 45
-    assignment                     shift and go to state 2
-    declaration                    shift and go to state 3
-    if_statement                   shift and go to state 4
-    expression                     shift and go to state 5
-    term                           shift and go to state 9
-    factor                         shift and go to state 12
 
 state 31
 
-    (12) condition -> expression EQUALS . expression
-    (19) expression -> . term PLUS term
-    (20) expression -> . term MINUS term
-    (21) expression -> . term
-    (22) term -> . factor TIMES factor
-    (23) term -> . factor DIVIDE factor
-    (24) term -> . factor
-    (25) factor -> . NUMBER
-    (26) factor -> . NAME
-    (27) factor -> . PLUS factor
-    (28) factor -> . MINUS factor
-    (29) factor -> . LPAREN expression RPAREN
+    (10) if_statement -> IF LPAREN condition RPAREN . block
+    (11) if_statement -> IF LPAREN condition RPAREN . block ELSE block
+    (18) block -> . LBRACE statement_list RBRACE
 
-    NUMBER          shift and go to state 13
-    NAME            shift and go to state 19
-    PLUS            shift and go to state 10
-    MINUS           shift and go to state 11
-    LPAREN          shift and go to state 14
+    LBRACE          shift and go to state 44
 
-    expression                     shift and go to state 46
-    term                           shift and go to state 9
-    factor                         shift and go to state 12
+    block                          shift and go to state 43
 
 state 32
 
-    (13) condition -> expression NOTEQUALS . expression
-    (19) expression -> . term PLUS term
-    (20) expression -> . term MINUS term
+    (12) condition -> expression EQUALS . expression
+    (19) expression -> . expression PLUS term
+    (20) expression -> . expression MINUS term
     (21) expression -> . term
-    (22) term -> . factor TIMES factor
-    (23) term -> . factor DIVIDE factor
+    (22) term -> . term TIMES factor
+    (23) term -> . term DIVIDE factor
     (24) term -> . factor
     (25) factor -> . NUMBER
     (26) factor -> . NAME
-    (27) factor -> . PLUS factor
-    (28) factor -> . MINUS factor
-    (29) factor -> . LPAREN expression RPAREN
+    (27) factor -> . LPAREN expression RPAREN
 
-    NUMBER          shift and go to state 13
-    NAME            shift and go to state 19
-    PLUS            shift and go to state 10
-    MINUS           shift and go to state 11
-    LPAREN          shift and go to state 14
+    NUMBER          shift and go to state 20
+    NAME            shift and go to state 16
+    LPAREN          shift and go to state 21
 
-    expression                     shift and go to state 47
-    term                           shift and go to state 9
-    factor                         shift and go to state 12
+    expression                     shift and go to state 45
+    term                           shift and go to state 18
+    factor                         shift and go to state 19
 
 state 33
 
-    (14) condition -> expression LESSTHAN . expression
-    (19) expression -> . term PLUS term
-    (20) expression -> . term MINUS term
+    (13) condition -> expression NOTEQUALS . expression
+    (19) expression -> . expression PLUS term
+    (20) expression -> . expression MINUS term
     (21) expression -> . term
-    (22) term -> . factor TIMES factor
-    (23) term -> . factor DIVIDE factor
+    (22) term -> . term TIMES factor
+    (23) term -> . term DIVIDE factor
     (24) term -> . factor
     (25) factor -> . NUMBER
     (26) factor -> . NAME
-    (27) factor -> . PLUS factor
-    (28) factor -> . MINUS factor
-    (29) factor -> . LPAREN expression RPAREN
+    (27) factor -> . LPAREN expression RPAREN
 
-    NUMBER          shift and go to state 13
-    NAME            shift and go to state 19
-    PLUS            shift and go to state 10
-    MINUS           shift and go to state 11
-    LPAREN          shift and go to state 14
+    NUMBER          shift and go to state 20
+    NAME            shift and go to state 16
+    LPAREN          shift and go to state 21
 
-    expression                     shift and go to state 48
-    term                           shift and go to state 9
-    factor                         shift and go to state 12
+    expression                     shift and go to state 46
+    term                           shift and go to state 18
+    factor                         shift and go to state 19
 
 state 34
 
-    (15) condition -> expression GREATERTHAN . expression
-    (19) expression -> . term PLUS term
-    (20) expression -> . term MINUS term
+    (14) condition -> expression LESSTHAN . expression
+    (19) expression -> . expression PLUS term
+    (20) expression -> . expression MINUS term
     (21) expression -> . term
-    (22) term -> . factor TIMES factor
-    (23) term -> . factor DIVIDE factor
+    (22) term -> . term TIMES factor
+    (23) term -> . term DIVIDE factor
     (24) term -> . factor
     (25) factor -> . NUMBER
     (26) factor -> . NAME
-    (27) factor -> . PLUS factor
-    (28) factor -> . MINUS factor
-    (29) factor -> . LPAREN expression RPAREN
+    (27) factor -> . LPAREN expression RPAREN
 
-    NUMBER          shift and go to state 13
-    NAME            shift and go to state 19
-    PLUS            shift and go to state 10
-    MINUS           shift and go to state 11
-    LPAREN          shift and go to state 14
+    NUMBER          shift and go to state 20
+    NAME            shift and go to state 16
+    LPAREN          shift and go to state 21
 
-    expression                     shift and go to state 49
-    term                           shift and go to state 9
-    factor                         shift and go to state 12
+    expression                     shift and go to state 47
+    term                           shift and go to state 18
+    factor                         shift and go to state 19
 
 state 35
 
-    (16) condition -> expression LESSEQUAL . expression
-    (19) expression -> . term PLUS term
-    (20) expression -> . term MINUS term
+    (15) condition -> expression GREATERTHAN . expression
+    (19) expression -> . expression PLUS term
+    (20) expression -> . expression MINUS term
     (21) expression -> . term
-    (22) term -> . factor TIMES factor
-    (23) term -> . factor DIVIDE factor
+    (22) term -> . term TIMES factor
+    (23) term -> . term DIVIDE factor
     (24) term -> . factor
     (25) factor -> . NUMBER
     (26) factor -> . NAME
-    (27) factor -> . PLUS factor
-    (28) factor -> . MINUS factor
-    (29) factor -> . LPAREN expression RPAREN
+    (27) factor -> . LPAREN expression RPAREN
 
-    NUMBER          shift and go to state 13
-    NAME            shift and go to state 19
-    PLUS            shift and go to state 10
-    MINUS           shift and go to state 11
-    LPAREN          shift and go to state 14
+    NUMBER          shift and go to state 20
+    NAME            shift and go to state 16
+    LPAREN          shift and go to state 21
 
-    expression                     shift and go to state 50
-    term                           shift and go to state 9
-    factor                         shift and go to state 12
+    expression                     shift and go to state 48
+    term                           shift and go to state 18
+    factor                         shift and go to state 19
 
 state 36
 
-    (17) condition -> expression GREATEREQUAL . expression
-    (19) expression -> . term PLUS term
-    (20) expression -> . term MINUS term
+    (16) condition -> expression LESSEQUAL . expression
+    (19) expression -> . expression PLUS term
+    (20) expression -> . expression MINUS term
     (21) expression -> . term
-    (22) term -> . factor TIMES factor
-    (23) term -> . factor DIVIDE factor
+    (22) term -> . term TIMES factor
+    (23) term -> . term DIVIDE factor
     (24) term -> . factor
     (25) factor -> . NUMBER
     (26) factor -> . NAME
-    (27) factor -> . PLUS factor
-    (28) factor -> . MINUS factor
-    (29) factor -> . LPAREN expression RPAREN
+    (27) factor -> . LPAREN expression RPAREN
 
-    NUMBER          shift and go to state 13
-    NAME            shift and go to state 19
-    PLUS            shift and go to state 10
-    MINUS           shift and go to state 11
-    LPAREN          shift and go to state 14
+    NUMBER          shift and go to state 20
+    NAME            shift and go to state 16
+    LPAREN          shift and go to state 21
 
-    expression                     shift and go to state 51
-    term                           shift and go to state 9
-    factor                         shift and go to state 12
+    expression                     shift and go to state 49
+    term                           shift and go to state 18
+    factor                         shift and go to state 19
 
 state 37
 
-    (19) expression -> term PLUS term .
+    (17) condition -> expression GREATEREQUAL . expression
+    (19) expression -> . expression PLUS term
+    (20) expression -> . expression MINUS term
+    (21) expression -> . term
+    (22) term -> . term TIMES factor
+    (23) term -> . term DIVIDE factor
+    (24) term -> . factor
+    (25) factor -> . NUMBER
+    (26) factor -> . NAME
+    (27) factor -> . LPAREN expression RPAREN
 
-    $end            reduce using rule 19 (expression -> term PLUS term .)
-    EQUALS          reduce using rule 19 (expression -> term PLUS term .)
-    NOTEQUALS       reduce using rule 19 (expression -> term PLUS term .)
-    LESSTHAN        reduce using rule 19 (expression -> term PLUS term .)
-    GREATERTHAN     reduce using rule 19 (expression -> term PLUS term .)
-    LESSEQUAL       reduce using rule 19 (expression -> term PLUS term .)
-    GREATEREQUAL    reduce using rule 19 (expression -> term PLUS term .)
-    RPAREN          reduce using rule 19 (expression -> term PLUS term .)
-    RBRACE          reduce using rule 19 (expression -> term PLUS term .)
-    NAME            reduce using rule 19 (expression -> term PLUS term .)
-    VAR             reduce using rule 19 (expression -> term PLUS term .)
-    IF              reduce using rule 19 (expression -> term PLUS term .)
-    NUMBER          reduce using rule 19 (expression -> term PLUS term .)
-    PLUS            reduce using rule 19 (expression -> term PLUS term .)
-    MINUS           reduce using rule 19 (expression -> term PLUS term .)
-    LPAREN          reduce using rule 19 (expression -> term PLUS term .)
-    LBRACE          reduce using rule 19 (expression -> term PLUS term .)
+    NUMBER          shift and go to state 20
+    NAME            shift and go to state 16
+    LPAREN          shift and go to state 21
 
+    expression                     shift and go to state 50
+    term                           shift and go to state 18
+    factor                         shift and go to state 19
 
 state 38
 
-    (20) expression -> term MINUS term .
+    (19) expression -> expression PLUS term .
+    (22) term -> term . TIMES factor
+    (23) term -> term . DIVIDE factor
 
-    $end            reduce using rule 20 (expression -> term MINUS term .)
-    EQUALS          reduce using rule 20 (expression -> term MINUS term .)
-    NOTEQUALS       reduce using rule 20 (expression -> term MINUS term .)
-    LESSTHAN        reduce using rule 20 (expression -> term MINUS term .)
-    GREATERTHAN     reduce using rule 20 (expression -> term MINUS term .)
-    LESSEQUAL       reduce using rule 20 (expression -> term MINUS term .)
-    GREATEREQUAL    reduce using rule 20 (expression -> term MINUS term .)
-    RPAREN          reduce using rule 20 (expression -> term MINUS term .)
-    RBRACE          reduce using rule 20 (expression -> term MINUS term .)
-    NAME            reduce using rule 20 (expression -> term MINUS term .)
-    VAR             reduce using rule 20 (expression -> term MINUS term .)
-    IF              reduce using rule 20 (expression -> term MINUS term .)
-    NUMBER          reduce using rule 20 (expression -> term MINUS term .)
-    PLUS            reduce using rule 20 (expression -> term MINUS term .)
-    MINUS           reduce using rule 20 (expression -> term MINUS term .)
-    LPAREN          reduce using rule 20 (expression -> term MINUS term .)
-    LBRACE          reduce using rule 20 (expression -> term MINUS term .)
+    PLUS            reduce using rule 19 (expression -> expression PLUS term .)
+    MINUS           reduce using rule 19 (expression -> expression PLUS term .)
+    END_OF_LINE     reduce using rule 19 (expression -> expression PLUS term .)
+    EQUALS          reduce using rule 19 (expression -> expression PLUS term .)
+    NOTEQUALS       reduce using rule 19 (expression -> expression PLUS term .)
+    LESSTHAN        reduce using rule 19 (expression -> expression PLUS term .)
+    GREATERTHAN     reduce using rule 19 (expression -> expression PLUS term .)
+    LESSEQUAL       reduce using rule 19 (expression -> expression PLUS term .)
+    GREATEREQUAL    reduce using rule 19 (expression -> expression PLUS term .)
+    RPAREN          reduce using rule 19 (expression -> expression PLUS term .)
+    TIMES           shift and go to state 27
+    DIVIDE          shift and go to state 28
 
 
 state 39
 
-    (22) term -> factor TIMES factor .
+    (20) expression -> expression MINUS term .
+    (22) term -> term . TIMES factor
+    (23) term -> term . DIVIDE factor
 
-    PLUS            reduce using rule 22 (term -> factor TIMES factor .)
-    MINUS           reduce using rule 22 (term -> factor TIMES factor .)
-    $end            reduce using rule 22 (term -> factor TIMES factor .)
-    EQUALS          reduce using rule 22 (term -> factor TIMES factor .)
-    NOTEQUALS       reduce using rule 22 (term -> factor TIMES factor .)
-    LESSTHAN        reduce using rule 22 (term -> factor TIMES factor .)
-    GREATERTHAN     reduce using rule 22 (term -> factor TIMES factor .)
-    LESSEQUAL       reduce using rule 22 (term -> factor TIMES factor .)
-    GREATEREQUAL    reduce using rule 22 (term -> factor TIMES factor .)
-    RPAREN          reduce using rule 22 (term -> factor TIMES factor .)
-    RBRACE          reduce using rule 22 (term -> factor TIMES factor .)
-    NAME            reduce using rule 22 (term -> factor TIMES factor .)
-    VAR             reduce using rule 22 (term -> factor TIMES factor .)
-    IF              reduce using rule 22 (term -> factor TIMES factor .)
-    NUMBER          reduce using rule 22 (term -> factor TIMES factor .)
-    LPAREN          reduce using rule 22 (term -> factor TIMES factor .)
-    LBRACE          reduce using rule 22 (term -> factor TIMES factor .)
+    PLUS            reduce using rule 20 (expression -> expression MINUS term .)
+    MINUS           reduce using rule 20 (expression -> expression MINUS term .)
+    END_OF_LINE     reduce using rule 20 (expression -> expression MINUS term .)
+    EQUALS          reduce using rule 20 (expression -> expression MINUS term .)
+    NOTEQUALS       reduce using rule 20 (expression -> expression MINUS term .)
+    LESSTHAN        reduce using rule 20 (expression -> expression MINUS term .)
+    GREATERTHAN     reduce using rule 20 (expression -> expression MINUS term .)
+    LESSEQUAL       reduce using rule 20 (expression -> expression MINUS term .)
+    GREATEREQUAL    reduce using rule 20 (expression -> expression MINUS term .)
+    RPAREN          reduce using rule 20 (expression -> expression MINUS term .)
+    TIMES           shift and go to state 27
+    DIVIDE          shift and go to state 28
 
 
 state 40
 
-    (23) term -> factor DIVIDE factor .
+    (22) term -> term TIMES factor .
 
-    PLUS            reduce using rule 23 (term -> factor DIVIDE factor .)
-    MINUS           reduce using rule 23 (term -> factor DIVIDE factor .)
-    $end            reduce using rule 23 (term -> factor DIVIDE factor .)
-    EQUALS          reduce using rule 23 (term -> factor DIVIDE factor .)
-    NOTEQUALS       reduce using rule 23 (term -> factor DIVIDE factor .)
-    LESSTHAN        reduce using rule 23 (term -> factor DIVIDE factor .)
-    GREATERTHAN     reduce using rule 23 (term -> factor DIVIDE factor .)
-    LESSEQUAL       reduce using rule 23 (term -> factor DIVIDE factor .)
-    GREATEREQUAL    reduce using rule 23 (term -> factor DIVIDE factor .)
-    RPAREN          reduce using rule 23 (term -> factor DIVIDE factor .)
-    RBRACE          reduce using rule 23 (term -> factor DIVIDE factor .)
-    NAME            reduce using rule 23 (term -> factor DIVIDE factor .)
-    VAR             reduce using rule 23 (term -> factor DIVIDE factor .)
-    IF              reduce using rule 23 (term -> factor DIVIDE factor .)
-    NUMBER          reduce using rule 23 (term -> factor DIVIDE factor .)
-    LPAREN          reduce using rule 23 (term -> factor DIVIDE factor .)
-    LBRACE          reduce using rule 23 (term -> factor DIVIDE factor .)
+    TIMES           reduce using rule 22 (term -> term TIMES factor .)
+    DIVIDE          reduce using rule 22 (term -> term TIMES factor .)
+    PLUS            reduce using rule 22 (term -> term TIMES factor .)
+    MINUS           reduce using rule 22 (term -> term TIMES factor .)
+    END_OF_LINE     reduce using rule 22 (term -> term TIMES factor .)
+    EQUALS          reduce using rule 22 (term -> term TIMES factor .)
+    NOTEQUALS       reduce using rule 22 (term -> term TIMES factor .)
+    LESSTHAN        reduce using rule 22 (term -> term TIMES factor .)
+    GREATERTHAN     reduce using rule 22 (term -> term TIMES factor .)
+    LESSEQUAL       reduce using rule 22 (term -> term TIMES factor .)
+    GREATEREQUAL    reduce using rule 22 (term -> term TIMES factor .)
+    RPAREN          reduce using rule 22 (term -> term TIMES factor .)
 
 
 state 41
 
-    (29) factor -> LPAREN expression RPAREN .
+    (23) term -> term DIVIDE factor .
 
-    TIMES           reduce using rule 29 (factor -> LPAREN expression RPAREN .)
-    DIVIDE          reduce using rule 29 (factor -> LPAREN expression RPAREN .)
-    PLUS            reduce using rule 29 (factor -> LPAREN expression RPAREN .)
-    MINUS           reduce using rule 29 (factor -> LPAREN expression RPAREN .)
-    $end            reduce using rule 29 (factor -> LPAREN expression RPAREN .)
-    EQUALS          reduce using rule 29 (factor -> LPAREN expression RPAREN .)
-    NOTEQUALS       reduce using rule 29 (factor -> LPAREN expression RPAREN .)
-    LESSTHAN        reduce using rule 29 (factor -> LPAREN expression RPAREN .)
-    GREATERTHAN     reduce using rule 29 (factor -> LPAREN expression RPAREN .)
-    LESSEQUAL       reduce using rule 29 (factor -> LPAREN expression RPAREN .)
-    GREATEREQUAL    reduce using rule 29 (factor -> LPAREN expression RPAREN .)
-    RPAREN          reduce using rule 29 (factor -> LPAREN expression RPAREN .)
-    RBRACE          reduce using rule 29 (factor -> LPAREN expression RPAREN .)
-    NAME            reduce using rule 29 (factor -> LPAREN expression RPAREN .)
-    VAR             reduce using rule 29 (factor -> LPAREN expression RPAREN .)
-    IF              reduce using rule 29 (factor -> LPAREN expression RPAREN .)
-    NUMBER          reduce using rule 29 (factor -> LPAREN expression RPAREN .)
-    LPAREN          reduce using rule 29 (factor -> LPAREN expression RPAREN .)
-    LBRACE          reduce using rule 29 (factor -> LPAREN expression RPAREN .)
+    TIMES           reduce using rule 23 (term -> term DIVIDE factor .)
+    DIVIDE          reduce using rule 23 (term -> term DIVIDE factor .)
+    PLUS            reduce using rule 23 (term -> term DIVIDE factor .)
+    MINUS           reduce using rule 23 (term -> term DIVIDE factor .)
+    END_OF_LINE     reduce using rule 23 (term -> term DIVIDE factor .)
+    EQUALS          reduce using rule 23 (term -> term DIVIDE factor .)
+    NOTEQUALS       reduce using rule 23 (term -> term DIVIDE factor .)
+    LESSTHAN        reduce using rule 23 (term -> term DIVIDE factor .)
+    GREATERTHAN     reduce using rule 23 (term -> term DIVIDE factor .)
+    LESSEQUAL       reduce using rule 23 (term -> term DIVIDE factor .)
+    GREATEREQUAL    reduce using rule 23 (term -> term DIVIDE factor .)
+    RPAREN          reduce using rule 23 (term -> term DIVIDE factor .)
 
 
 state 42
 
-    (8) declaration -> VAR NAME ASSIGN expression .
+    (27) factor -> LPAREN expression RPAREN .
 
-    $end            reduce using rule 8 (declaration -> VAR NAME ASSIGN expression .)
-    RBRACE          reduce using rule 8 (declaration -> VAR NAME ASSIGN expression .)
-    NAME            reduce using rule 8 (declaration -> VAR NAME ASSIGN expression .)
-    VAR             reduce using rule 8 (declaration -> VAR NAME ASSIGN expression .)
-    IF              reduce using rule 8 (declaration -> VAR NAME ASSIGN expression .)
-    NUMBER          reduce using rule 8 (declaration -> VAR NAME ASSIGN expression .)
-    PLUS            reduce using rule 8 (declaration -> VAR NAME ASSIGN expression .)
-    MINUS           reduce using rule 8 (declaration -> VAR NAME ASSIGN expression .)
-    LPAREN          reduce using rule 8 (declaration -> VAR NAME ASSIGN expression .)
+    TIMES           reduce using rule 27 (factor -> LPAREN expression RPAREN .)
+    DIVIDE          reduce using rule 27 (factor -> LPAREN expression RPAREN .)
+    PLUS            reduce using rule 27 (factor -> LPAREN expression RPAREN .)
+    MINUS           reduce using rule 27 (factor -> LPAREN expression RPAREN .)
+    END_OF_LINE     reduce using rule 27 (factor -> LPAREN expression RPAREN .)
+    EQUALS          reduce using rule 27 (factor -> LPAREN expression RPAREN .)
+    NOTEQUALS       reduce using rule 27 (factor -> LPAREN expression RPAREN .)
+    LESSTHAN        reduce using rule 27 (factor -> LPAREN expression RPAREN .)
+    GREATERTHAN     reduce using rule 27 (factor -> LPAREN expression RPAREN .)
+    LESSEQUAL       reduce using rule 27 (factor -> LPAREN expression RPAREN .)
+    GREATEREQUAL    reduce using rule 27 (factor -> LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 27 (factor -> LPAREN expression RPAREN .)
 
 
 state 43
 
-    (11) if_statement -> IF condition block ELSE . block
-    (18) block -> . LBRACE statement_list RBRACE
+    (10) if_statement -> IF LPAREN condition RPAREN block .
+    (11) if_statement -> IF LPAREN condition RPAREN block . ELSE block
 
-    LBRACE          shift and go to state 30
+    NAME            reduce using rule 10 (if_statement -> IF LPAREN condition RPAREN block .)
+    VAR             reduce using rule 10 (if_statement -> IF LPAREN condition RPAREN block .)
+    IF              reduce using rule 10 (if_statement -> IF LPAREN condition RPAREN block .)
+    $end            reduce using rule 10 (if_statement -> IF LPAREN condition RPAREN block .)
+    RBRACE          reduce using rule 10 (if_statement -> IF LPAREN condition RPAREN block .)
+    ELSE            shift and go to state 51
 
-    block                          shift and go to state 52
 
 state 44
 
-    (18) block -> LBRACE statement_list . RBRACE
-    (6) statement_list -> statement_list . statement
-    (1) statement -> . assignment
-    (2) statement -> . declaration
-    (3) statement -> . if_statement
-    (4) statement -> . expression
+    (18) block -> LBRACE . statement_list RBRACE
+    (2) statement_list -> . statement
+    (3) statement_list -> . statement_list statement
+    (4) statement -> . assignment END_OF_LINE
+    (5) statement -> . declaration END_OF_LINE
+    (6) statement -> . if_statement
     (9) assignment -> . NAME ASSIGN expression
     (7) declaration -> . VAR NAME
     (8) declaration -> . VAR NAME ASSIGN expression
-    (10) if_statement -> . IF condition block
-    (11) if_statement -> . IF condition block ELSE block
-    (19) expression -> . term PLUS term
-    (20) expression -> . term MINUS term
-    (21) expression -> . term
-    (22) term -> . factor TIMES factor
-    (23) term -> . factor DIVIDE factor
-    (24) term -> . factor
-    (25) factor -> . NUMBER
-    (26) factor -> . NAME
-    (27) factor -> . PLUS factor
-    (28) factor -> . MINUS factor
-    (29) factor -> . LPAREN expression RPAREN
+    (10) if_statement -> . IF LPAREN condition RPAREN block
+    (11) if_statement -> . IF LPAREN condition RPAREN block ELSE block
 
-    RBRACE          shift and go to state 53
-    NAME            shift and go to state 6
-    VAR             shift and go to state 7
-    IF              shift and go to state 8
-    NUMBER          shift and go to state 13
-    PLUS            shift and go to state 10
-    MINUS           shift and go to state 11
-    LPAREN          shift and go to state 14
+    NAME            shift and go to state 7
+    VAR             shift and go to state 8
+    IF              shift and go to state 9
 
-    statement                      shift and go to state 54
-    assignment                     shift and go to state 2
-    declaration                    shift and go to state 3
-    if_statement                   shift and go to state 4
-    expression                     shift and go to state 5
-    term                           shift and go to state 9
-    factor                         shift and go to state 12
+    statement_list                 shift and go to state 52
+    statement                      shift and go to state 3
+    assignment                     shift and go to state 4
+    declaration                    shift and go to state 5
+    if_statement                   shift and go to state 6
 
 state 45
 
-    (5) statement_list -> statement .
+    (12) condition -> expression EQUALS expression .
+    (19) expression -> expression . PLUS term
+    (20) expression -> expression . MINUS term
 
-    RBRACE          reduce using rule 5 (statement_list -> statement .)
-    NAME            reduce using rule 5 (statement_list -> statement .)
-    VAR             reduce using rule 5 (statement_list -> statement .)
-    IF              reduce using rule 5 (statement_list -> statement .)
-    NUMBER          reduce using rule 5 (statement_list -> statement .)
-    PLUS            reduce using rule 5 (statement_list -> statement .)
-    MINUS           reduce using rule 5 (statement_list -> statement .)
-    LPAREN          reduce using rule 5 (statement_list -> statement .)
+    RPAREN          reduce using rule 12 (condition -> expression EQUALS expression .)
+    PLUS            shift and go to state 25
+    MINUS           shift and go to state 26
 
 
 state 46
 
-    (12) condition -> expression EQUALS expression .
+    (13) condition -> expression NOTEQUALS expression .
+    (19) expression -> expression . PLUS term
+    (20) expression -> expression . MINUS term
 
-    LBRACE          reduce using rule 12 (condition -> expression EQUALS expression .)
+    RPAREN          reduce using rule 13 (condition -> expression NOTEQUALS expression .)
+    PLUS            shift and go to state 25
+    MINUS           shift and go to state 26
 
 
 state 47
 
-    (13) condition -> expression NOTEQUALS expression .
+    (14) condition -> expression LESSTHAN expression .
+    (19) expression -> expression . PLUS term
+    (20) expression -> expression . MINUS term
 
-    LBRACE          reduce using rule 13 (condition -> expression NOTEQUALS expression .)
+    RPAREN          reduce using rule 14 (condition -> expression LESSTHAN expression .)
+    PLUS            shift and go to state 25
+    MINUS           shift and go to state 26
 
 
 state 48
 
-    (14) condition -> expression LESSTHAN expression .
+    (15) condition -> expression GREATERTHAN expression .
+    (19) expression -> expression . PLUS term
+    (20) expression -> expression . MINUS term
 
-    LBRACE          reduce using rule 14 (condition -> expression LESSTHAN expression .)
+    RPAREN          reduce using rule 15 (condition -> expression GREATERTHAN expression .)
+    PLUS            shift and go to state 25
+    MINUS           shift and go to state 26
 
 
 state 49
 
-    (15) condition -> expression GREATERTHAN expression .
+    (16) condition -> expression LESSEQUAL expression .
+    (19) expression -> expression . PLUS term
+    (20) expression -> expression . MINUS term
 
-    LBRACE          reduce using rule 15 (condition -> expression GREATERTHAN expression .)
+    RPAREN          reduce using rule 16 (condition -> expression LESSEQUAL expression .)
+    PLUS            shift and go to state 25
+    MINUS           shift and go to state 26
 
 
 state 50
 
-    (16) condition -> expression LESSEQUAL expression .
+    (17) condition -> expression GREATEREQUAL expression .
+    (19) expression -> expression . PLUS term
+    (20) expression -> expression . MINUS term
 
-    LBRACE          reduce using rule 16 (condition -> expression LESSEQUAL expression .)
+    RPAREN          reduce using rule 17 (condition -> expression GREATEREQUAL expression .)
+    PLUS            shift and go to state 25
+    MINUS           shift and go to state 26
 
 
 state 51
 
-    (17) condition -> expression GREATEREQUAL expression .
+    (11) if_statement -> IF LPAREN condition RPAREN block ELSE . block
+    (18) block -> . LBRACE statement_list RBRACE
 
-    LBRACE          reduce using rule 17 (condition -> expression GREATEREQUAL expression .)
+    LBRACE          shift and go to state 44
 
+    block                          shift and go to state 53
 
 state 52
 
-    (11) if_statement -> IF condition block ELSE block .
+    (18) block -> LBRACE statement_list . RBRACE
+    (3) statement_list -> statement_list . statement
+    (4) statement -> . assignment END_OF_LINE
+    (5) statement -> . declaration END_OF_LINE
+    (6) statement -> . if_statement
+    (9) assignment -> . NAME ASSIGN expression
+    (7) declaration -> . VAR NAME
+    (8) declaration -> . VAR NAME ASSIGN expression
+    (10) if_statement -> . IF LPAREN condition RPAREN block
+    (11) if_statement -> . IF LPAREN condition RPAREN block ELSE block
 
-    $end            reduce using rule 11 (if_statement -> IF condition block ELSE block .)
-    RBRACE          reduce using rule 11 (if_statement -> IF condition block ELSE block .)
-    NAME            reduce using rule 11 (if_statement -> IF condition block ELSE block .)
-    VAR             reduce using rule 11 (if_statement -> IF condition block ELSE block .)
-    IF              reduce using rule 11 (if_statement -> IF condition block ELSE block .)
-    NUMBER          reduce using rule 11 (if_statement -> IF condition block ELSE block .)
-    PLUS            reduce using rule 11 (if_statement -> IF condition block ELSE block .)
-    MINUS           reduce using rule 11 (if_statement -> IF condition block ELSE block .)
-    LPAREN          reduce using rule 11 (if_statement -> IF condition block ELSE block .)
+    RBRACE          shift and go to state 54
+    NAME            shift and go to state 7
+    VAR             shift and go to state 8
+    IF              shift and go to state 9
 
+    statement                      shift and go to state 10
+    assignment                     shift and go to state 4
+    declaration                    shift and go to state 5
+    if_statement                   shift and go to state 6
 
 state 53
 
-    (18) block -> LBRACE statement_list RBRACE .
+    (11) if_statement -> IF LPAREN condition RPAREN block ELSE block .
 
-    ELSE            reduce using rule 18 (block -> LBRACE statement_list RBRACE .)
-    $end            reduce using rule 18 (block -> LBRACE statement_list RBRACE .)
-    RBRACE          reduce using rule 18 (block -> LBRACE statement_list RBRACE .)
-    NAME            reduce using rule 18 (block -> LBRACE statement_list RBRACE .)
-    VAR             reduce using rule 18 (block -> LBRACE statement_list RBRACE .)
-    IF              reduce using rule 18 (block -> LBRACE statement_list RBRACE .)
-    NUMBER          reduce using rule 18 (block -> LBRACE statement_list RBRACE .)
-    PLUS            reduce using rule 18 (block -> LBRACE statement_list RBRACE .)
-    MINUS           reduce using rule 18 (block -> LBRACE statement_list RBRACE .)
-    LPAREN          reduce using rule 18 (block -> LBRACE statement_list RBRACE .)
+    NAME            reduce using rule 11 (if_statement -> IF LPAREN condition RPAREN block ELSE block .)
+    VAR             reduce using rule 11 (if_statement -> IF LPAREN condition RPAREN block ELSE block .)
+    IF              reduce using rule 11 (if_statement -> IF LPAREN condition RPAREN block ELSE block .)
+    $end            reduce using rule 11 (if_statement -> IF LPAREN condition RPAREN block ELSE block .)
+    RBRACE          reduce using rule 11 (if_statement -> IF LPAREN condition RPAREN block ELSE block .)
 
 
 state 54
 
-    (6) statement_list -> statement_list statement .
+    (18) block -> LBRACE statement_list RBRACE .
 
-    RBRACE          reduce using rule 6 (statement_list -> statement_list statement .)
-    NAME            reduce using rule 6 (statement_list -> statement_list statement .)
-    VAR             reduce using rule 6 (statement_list -> statement_list statement .)
-    IF              reduce using rule 6 (statement_list -> statement_list statement .)
-    NUMBER          reduce using rule 6 (statement_list -> statement_list statement .)
-    PLUS            reduce using rule 6 (statement_list -> statement_list statement .)
-    MINUS           reduce using rule 6 (statement_list -> statement_list statement .)
-    LPAREN          reduce using rule 6 (statement_list -> statement_list statement .)
+    ELSE            reduce using rule 18 (block -> LBRACE statement_list RBRACE .)
+    NAME            reduce using rule 18 (block -> LBRACE statement_list RBRACE .)
+    VAR             reduce using rule 18 (block -> LBRACE statement_list RBRACE .)
+    IF              reduce using rule 18 (block -> LBRACE statement_list RBRACE .)
+    $end            reduce using rule 18 (block -> LBRACE statement_list RBRACE .)
+    RBRACE          reduce using rule 18 (block -> LBRACE statement_list RBRACE .)
 
-WARNING: 
-WARNING: Conflicts:
-WARNING: 
-WARNING: shift/reduce conflict for PLUS in state 9 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 9 resolved as shift

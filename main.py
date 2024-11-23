@@ -4,8 +4,11 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 from domain.token import lexer
 from domain.parser import parser
+from domain.parser import p_error
 from domain.tree import build_tree, draw_tree
 from domain.graph import graficar_afd, graficar_afn
+
+
 
 # Define la clase principal de la aplicación
 class Main(QMainWindow):
@@ -84,38 +87,89 @@ class Main(QMainWindow):
         self.analisisLexico.clear()
         data = self.codigoFuente.toPlainText()
         lexer.input(data)
-
+    
         output = []
-        line_number = 1  # Variable para llevar el número de línea
+        line_number = 1  # Variable to track line number
+        error_message = None  # Variable to capture any error message
+    
         while True:
             tok = lexer.token()
+            
             if not tok:
                 break
-            # Si encontramos el token BREVE, incrementamos el número de línea
-            if tok.type == 'BREVE':
-                line_number += 1
-            # Agregamos la información del token a la salida con el número de línea actual
+            
+            if isinstance(tok, str):  # If tok is a string, it means we got an error message
+                error_message = tok  # Capture the error message
+                break  # Exit the loop because we've encountered an error
+            
+            # Check if the token is invalid and call t_error
+            if tok.type == 'ERROR':  # 'ERROR' should be the token type for invalid tokens
+                error_message = tok.value  # Capture the error message from t_error
+                break  # Exit the loop since we've encountered an error
+            
+            # Add normal token information to output with current line number
             output.append(f"Linea {line_number}: \t Tipo: {tok.type} \t Valor: {tok.value} \t Posicion: {tok.lexpos} \n ")
+    
+        if error_message:
+            # If an error occurred, show the error message in the GUI
+            self.analisisLexico.setText(error_message)
+        else:
+            # If no error occurred, display the normal token output
+            self.analisisLexico.setText("\n".join(output))
 
-        self.analisisLexico.setText("\n".join(output))
+
 
 
 
     # Función para realizar el análisis sintáctico
     def ev_sintactico(self):
-        self.analisisSintactico.clear()
-        data = self.codigoFuente.toPlainText()
-        lexer.input(data)
+        self.analisisSintactico.clear()  # Clear previous output
+        data = self.codigoFuente.toPlainText()  # Get the code from the text input
+    
+        try:
+            # Split the code into lines for line-by-line AST generation
+            code_lines = data.splitlines()
+            formatted_ast = ""
+    
+            # Process each line and generate its AST
+            for idx, line in enumerate(code_lines):
+                # Parse the line and generate the AST
+                ast = parser.parse(line, lexer=lexer)
+    
+                if ast:
+                    formatted_ast += f"Línea {idx + 1}: {self.format_ast(ast)}\n"
+                else:
+                    formatted_ast += f"Línea {idx + 1}: ERROR: Error sintáctico \n No se pudo generar el resultado del análisis sintáctico.\n"
+    
+            # Display the formatted AST in the output window
+            self.analisisSintactico.setText(formatted_ast)
+    
+        except Exception as e:
+            # If an error occurs during parsing, call p_error to generate the error message
+            error_message = p_error(None)  # Here None simulates that the parser threw an error
+            
+            # Show the error message in the GUI
+            self.analisisSintactico.setText(error_message)
+    
+            # Optionally, print to console for debugging
+            print(f"Error en el análisis sintáctico: {e}")
 
-        valores = []
-        while True:
-            tok = lexer.token()
-            if not tok:
-                break
-            if tok.type in ['NUMBER', 'REAL', 'STRING', 'CHAR']:
-                valores.append(str(tok.value))
 
-        self.analisisSintactico.setText("\n".join(valores))
+    def format_ast(self, node, indent=0):
+        """Formatea el AST de manera compacta por línea de código."""
+        spaces = "  " * indent  # Genera espacios para la indentación
+        if isinstance(node, list):
+            # Si es una lista, pon todos los elementos en una línea con comas
+            formatted = ", ".join(self.format_ast(child, indent) for child in node)
+            return f"{spaces}[{formatted}]"
+        elif isinstance(node, tuple):
+            # Si es una tupla, pon el nombre del nodo y sus elementos en una línea
+            formatted_children = ", ".join(self.format_ast(child, indent) for child in node[1:])
+            return f"{spaces}({node[0]}: {formatted_children})"
+        else:
+            # Para valores simples, devuelve con el valor directo
+            return f"{spaces}{repr(node)}"
+
 
     # Función para mostrar el árbol de derivación
     def mostrar_arbol(self):

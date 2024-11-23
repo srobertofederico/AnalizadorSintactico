@@ -1,26 +1,30 @@
 import ply.yacc as yacc
 from domain.token import tokens
 
-# Keeping existing rules and adding new ones
-
-def p_statement(p):
+# Grammar rules
+def p_program(p):
     '''
-    statement : assignment
-              | declaration
-              | if_statement
-              | expression
+    program : statement_list
     '''
-    p[0] = ('statement', p[1])
+    p[0] = ('program', p[1])
 
 def p_statement_list(p):
     '''
     statement_list : statement
-                  | statement_list statement
+                   | statement_list statement
     '''
     if len(p) == 2:
         p[0] = [p[1]]
     else:
         p[0] = p[1] + [p[2]]
+
+def p_statement(p):
+    '''
+    statement : assignment END_OF_LINE
+              | declaration END_OF_LINE
+              | if_statement
+    '''
+    p[0] = ('statement', p[1])
 
 def p_declaration(p):
     '''
@@ -30,7 +34,7 @@ def p_declaration(p):
     if len(p) == 3:
         p[0] = ('declare', p[2], None)
     else:
-        p[0] = ('declare', p[2], p[4])
+        p[0] =  ('declare', p[2], p[4])
 
 def p_assignment(p):
     '''
@@ -40,13 +44,13 @@ def p_assignment(p):
 
 def p_if_statement(p):
     '''
-    if_statement : IF condition block
-                | IF condition block ELSE block
+    if_statement : IF LPAREN condition RPAREN block
+                 | IF LPAREN condition RPAREN block ELSE block
     '''
-    if len(p) == 4:
-        p[0] = ('if', p[2], p[3], None)
+    if len(p) == 6:
+        p[0] = ('if', p[3], p[5], None)
     else:
-        p[0] = ('if', p[2], p[3], p[5])
+        p[0] = ('if', p[3], p[5], p[7])
 
 def p_condition(p):
     '''
@@ -67,8 +71,8 @@ def p_block(p):
 
 def p_expression(p):
     '''
-    expression : term PLUS term
-               | term MINUS term
+    expression : expression PLUS term
+               | expression MINUS term
     '''
     p[0] = ('binop', p[2], p[1], p[3])
 
@@ -80,8 +84,8 @@ def p_expression_term(p):
 
 def p_term(p):
     '''
-    term : factor TIMES factor
-         | factor DIVIDE factor
+    term : term TIMES factor
+         | term DIVIDE factor
     '''
     p[0] = ('binop', p[2], p[1], p[3])
 
@@ -91,33 +95,42 @@ def p_term_factor(p):
     '''
     p[0] = p[1]
 
-def p_factor_number(p):
+def p_factor(p):
     '''
     factor : NUMBER
+           | NAME
+           | LPAREN expression RPAREN
     '''
-    p[0] = ('number', p[1])
-
-def p_factor_name(p):
-    '''
-    factor : NAME
-    '''
-    p[0] = ('name', p[1])
-
-def p_factor_unary(p):
-    '''
-    factor : PLUS factor
-           | MINUS factor
-    '''
-    p[0] = ('unary', p[1], p[2])
-
-def p_factor_grouped(p):
-    '''
-    factor : LPAREN expression RPAREN
-    '''
-    p[0] = ('grouped', p[2])
+    if len(p) == 2:
+        if isinstance(p[1], int):
+            p[0] = ('number', p[1])
+        else:
+            p[0] = ('name', p[1])
+    else:
+        p[0] = ('grouped', p[2])
 
 def p_error(p):
-    print(f'Syntax error at {p.value!r}')
+    """
+    Handle syntax errors and display detailed error messages.
+    This function will return an error message that can be used in the GUI.
+    """
+    if p:
+        # If there is a parsing error, display the unexpected token
+        error_message = f"ERROR: Token inesperado '{p.value}' en la línea {p.lineno}, posición {p.lexpos}."
+        
+        # Suggestion for fixing the error (based on the token type)
+        suggestion = f"Sugerencia: revise la estructura cerca de '{p.value}'"
+
+        # Combine error message and suggestion
+        error_message += f"\n{suggestion}"
+
+        # Return the error message to be used by the GUI
+        return error_message
+    else:
+        # If the error is at the end of the input (unexpected EOF)
+        error_message = "ERROR: Fin de archivo inesperado. Posiblemente falta cerrar un bloque o una expresión."
+        return error_message
+
 
 # Build the parser
-parser = yacc.yacc()
+parser = yacc.yacc(debug=True)
