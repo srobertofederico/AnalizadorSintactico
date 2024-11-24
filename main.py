@@ -123,36 +123,30 @@ class Main(QMainWindow):
 
     # Función para realizar el análisis sintáctico
     def ev_sintactico(self):
-        self.analisisSintactico.clear()  # Clear previous output
-        data = self.codigoFuente.toPlainText()  # Get the code from the text input
+        self.analisisSintactico.clear()  # Limpiar salida previa
+        data = self.codigoFuente.toPlainText()  # Obtener código fuente
+    
+        # Verificar si hay código fuente
+        if not data.strip():
+            self.analisisSintactico.setText("No se encontró código fuente para analizar.")
+            return
     
         try:
-            # Split the code into lines for line-by-line AST generation
-            code_lines = data.splitlines()
-            formatted_ast = ""
+            # Limpiar líneas vacías y concatenar todo el programa
+            cleaned_data = "\n".join(line.strip() for line in data.splitlines() if line.strip())
     
-            # Process each line and generate its AST
-            for idx, line in enumerate(code_lines):
-                # Parse the line and generate the AST
-                ast = parser.parse(line, lexer=lexer)
+            # Realizar análisis sintáctico completo
+            result = parser.parse(cleaned_data, lexer=lexer)
     
-                if ast:
-                    formatted_ast += f"Línea {idx + 1}: {self.format_ast(ast)}\n"
-                else:
-                    formatted_ast += f"Línea {idx + 1}: ERROR: Error sintáctico \n No se pudo generar el resultado del análisis sintáctico.\n"
-    
-            # Display the formatted AST in the output window
-            self.analisisSintactico.setText(formatted_ast)
-    
+            if result:
+                # Formatear el resultado del AST y mostrarlo
+                formatted_ast = self.format_ast(result)
+                self.analisisSintactico.setText(f"Árbol Sintáctico:\n{formatted_ast}")
+            else:
+                self.analisisSintactico.setText("ERROR: Error sintáctico\nNo se pudo generar el resultado del análisis sintáctico.")
         except Exception as e:
-            # If an error occurs during parsing, call p_error to generate the error message
-            error_message = p_error(None)  # Here None simulates that the parser threw an error
-            
-            # Show the error message in the GUI
-            self.analisisSintactico.setText(error_message)
-    
-            # Optionally, print to console for debugging
-            print(f"Error en el análisis sintáctico: {e}")
+            # Capturar errores inesperados y mostrarlos
+            self.analisisSintactico.setText(f"ERROR: {e}")
 
 
     def format_ast(self, node, indent=0):
@@ -173,33 +167,35 @@ class Main(QMainWindow):
 
     # Función para mostrar el árbol de derivación
     def mostrar_arbol(self):
-        data = self.codigoFuente.toPlainText()
+        data = self.codigoFuente.toPlainText()  # Obtener el código fuente
 
-        # Obtener solo la primera línea no vacía del código fuente
-        first_line = ""
-        for line in data.splitlines():
-            if line.strip():
-                first_line = line.strip()
-                break
-
-        if not first_line:
-            print("No se encontró una línea válida para analizar.")
+        # Verificar si hay código fuente
+        if not data.strip():
+            print("No se encontró código fuente para analizar.")
             return
+    
+        try:
+            # Limpiar y concatenar líneas no vacías
+            cleaned_data = "\n".join(line.strip() for line in data.splitlines() if line.strip())
+    
+            # Parsear el código completo
+            result = parser.parse(cleaned_data, lexer=lexer)
+    
+            if result:
+                # Construir el árbol de derivación
+                tree = build_tree(result)
+    
+                # Dibujar el árbol de derivación
+                graph = draw_tree(tree)
+                graph.write_png('arbol_derivacion.png')
+    
+                # Mostrar el árbol en una ventana
+                self.mostrar_imagen('arbol_derivacion.png')
+            else:
+                print("Error al analizar el código fuente.")
+        except Exception as e:
+            print(f"Error al construir o dibujar el árbol: {e}")
 
-        result = parser.parse(first_line, lexer=lexer)
-
-        if result:
-            # Construir el árbol de derivación
-            tree = build_tree(result)
-
-            # Dibujar el árbol de derivación
-            graph = draw_tree(tree)
-            graph.write_png('arbol_derivacion.png')
-
-            # Mostrar el árbol en una ventana
-            self.mostrar_imagen('arbol_derivacion.png')
-        else:
-            print("Error al analizar la línea para generar el árbol de derivación.")
 
     # Función para construir el AFD basado en la entrada
     def construir_afd(self, data):

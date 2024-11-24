@@ -17,12 +17,21 @@ class TreeNode:
 # Función para construir el árbol de derivación a partir de una estructura de árbol dada.
 def build_tree(t):
     if isinstance(t, tuple):  # Si el nodo tiene hijos.
-        node = TreeNode(t[0])  # Crea un nodo con el primer elemento como nombre.
-        for child in t[1:]:  # Itera sobre los hijos.
-            node.add_child(build_tree(child))  # Construye el árbol recursivamente para cada hijo.
+        # El primer elemento de la tupla es el nombre del nodo.
+        node = TreeNode(str(t[0]))  # Convertir el nombre del nodo en cadena para evitar errores.
+
+        # Los siguientes elementos de la tupla son los hijos.
+        for child in t[1:]:
+            # Llamar recursivamente para construir subárboles.
+            node.add_child(build_tree(child))
         return node
-    else:  # Si el nodo es una hoja.
-        return TreeNode(str(t))  # Crea un nodo con el valor de la hoja convertido en cadena.
+    elif isinstance(t, list):  # Si es una lista, construir subárbol para cada elemento.
+        node = TreeNode("list")
+        for item in t:
+            node.add_child(build_tree(item))
+        return node
+    else:  # Si el nodo es una hoja (valor individual).
+        return TreeNode(str(t))  # Convertir en nodo hoja.
 
 # Función para dibujar el árbol de derivación utilizando la biblioteca pydot.
 def draw_tree(node, graph=None, parent=None):
