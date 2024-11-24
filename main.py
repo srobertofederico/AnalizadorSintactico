@@ -7,6 +7,7 @@ from domain.parser import parser
 from domain.parser import p_error
 from domain.tree import build_tree, draw_tree
 from domain.graph import graficar_afd, graficar_afn
+import pprint
 
 
 
@@ -139,9 +140,11 @@ class Main(QMainWindow):
             result = parser.parse(cleaned_data, lexer=lexer)
     
             if result:
+                if isinstance(result, tuple) and result[0] == 'program':
+                    result = result[1]
                 # Formatear el resultado del AST y mostrarlo
-                formatted_ast = self.format_ast(result)
-                self.analisisSintactico.setText(f"Árbol Sintáctico:\n{formatted_ast}")
+                formatted_ast = pprint.pformat(result, width=80, indent=4)
+                self.analisisSintactico.setText(formatted_ast)
             else:
                 self.analisisSintactico.setText("ERROR: Error sintáctico\nNo se pudo generar el resultado del análisis sintáctico.")
         except Exception as e:
@@ -265,19 +268,26 @@ class Main(QMainWindow):
 
     # Función para mostrar una imagen en una nueva ventana con scroll
     def mostrar_imagen(self, archivo_imagen):
+        # Crear una nueva ventana para la imagen
         imagen_window = QMainWindow(self)
-        imagen_window.setWindowTitle(archivo_imagen)
+        imagen_window.setWindowTitle(f"Vista de: {archivo_imagen}")
 
-        scroll_area = QScrollArea(imagen_window)
-        scroll_area.setWidgetResizable(True)
-
-        imagen_label = QLabel()
+        # Crear una etiqueta para mostrar la imagen
+        imagen_label = QLabel(imagen_window)
         pixmap = QPixmap(archivo_imagen)
-        imagen_label.setPixmap(pixmap)
 
-        scroll_area.setWidget(imagen_label)
-        imagen_window.setCentralWidget(scroll_area)
-        imagen_window.resize(800, 600)
+        if pixmap.isNull():
+            imagen_label.setText("Error: No se pudo cargar la imagen.")
+            imagen_label.setAlignment(Qt.AlignCenter)
+            imagen_window.resize(400, 300)  # Tamaño predeterminado en caso de error
+        else:
+            imagen_label.setPixmap(pixmap)
+            imagen_label.setAlignment(Qt.AlignCenter)
+            imagen_window.resize(pixmap.width(), pixmap.height())  # Ajustar al tamaño de la imagen
+
+        imagen_window.setCentralWidget(imagen_label)
+
+        # Mostrar la ventana
         imagen_window.show()
 
 # Función principal para iniciar la aplicación
