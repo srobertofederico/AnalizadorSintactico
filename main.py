@@ -93,8 +93,8 @@ class Main(QMainWindow):
         lexer.input(data)
     
         output = []
-        line_number = 1  # Variable to track line number
-        error_message = None  # Variable to capture any error message
+        line_number = 1
+        error_message = None
     
         while True:
             tok = lexer.token()
@@ -102,40 +102,29 @@ class Main(QMainWindow):
             if not tok:
                 break
             
-            if isinstance(tok, str):  # If tok is a string, it means we got an error message
-                error_message = tok  # Capture the error message
-                break  # Exit the loop because we've encountered an error
+            if isinstance(tok, str):
+                error_message = tok
+                break
             
-            # Check if the token is invalid and call t_error
-            if tok.type == 'ERROR':  # 'ERROR' should be the token type for invalid tokens
-                error_message = tok.value  # Capture the error message from t_error
-                break  # Exit the loop since we've encountered an error
+            if tok.type == 'ERROR':
+                error_message = tok.value
+                break
             
-            # Add normal token information to output with current line number
             output.append(f"Linea {line_number}: \t Tipo: {tok.type} \t Valor: {tok.value} \t Posicion: {tok.lexpos} \n ")
     
         if error_message:
-            # If an error occurred, show the error message in the GUI
             self.analisisLexico.setText(error_message)
         else:
-            # If no error occurred, display the normal token output
             self.analisisLexico.setText("\n".join(output))
-
-
-
-
 
     # Función para realizar el análisis sintáctico
     def ev_sintactico(self):
-        self.analisisSintactico.clear()  # Limpiar salida previa
-        data = self.codigoFuente.toPlainText()  # Obtener código fuente
-    
+        self.analisisSintactico.clear()
+        data = self.codigoFuente.toPlainText()
         if not data.strip():
             self.analisisSintactico.setText("No se encontró código fuente para analizar.")
             return
-    
         try:
-            # Limpiar líneas vacías y concatenar todo el programa
             cleaned_data = "\n".join(line.strip() for line in data.splitlines() if line.strip())
             result = parser.parse(cleaned_data, lexer=lexer)
     
@@ -154,45 +143,36 @@ class Main(QMainWindow):
 
     def format_ast(self, node, indent=0):
         """Formatea el AST de manera compacta por línea de código."""
-        spaces = "  " * indent  # Genera espacios para la indentación
+        spaces = "  " * indent
         if isinstance(node, list):
-            # Si es una lista, pon todos los elementos en una línea con comas
             formatted = ", ".join(self.format_ast(child, indent) for child in node)
             return f"{spaces}[{formatted}]"
         elif isinstance(node, tuple):
-            # Si es una tupla, pon el nombre del nodo y sus elementos en una línea
             formatted_children = ", ".join(self.format_ast(child, indent) for child in node[1:])
             return f"{spaces}({node[0]}: {formatted_children})"
         else:
-            # Para valores simples, devuelve con el valor directo
             return f"{spaces}{repr(node)}"
 
 
     # Función para mostrar el árbol de derivación
     def mostrar_arbol(self):
-        data = self.codigoFuente.toPlainText()  # Obtener el código fuente
+        data = self.codigoFuente.toPlainText()
 
-        # Verificar si hay código fuente
         if not data.strip():
             print("No se encontró código fuente para analizar.")
             return
     
         try:
-            # Limpiar y concatenar líneas no vacías
             cleaned_data = "\n".join(line.strip() for line in data.splitlines() if line.strip())
     
-            # Parsear el código completo
             result = parser.parse(cleaned_data, lexer=lexer)
     
             if result:
-                # Construir el árbol de derivación
                 tree = build_tree(result)
-    
-                # Dibujar el árbol de derivación
+                
                 graph = draw_tree(tree)
                 graph.write_png('arbol_derivacion.png')
     
-                # Mostrar el árbol en una ventana
                 self.mostrar_imagen('arbol_derivacion.png')
             else:
                 print("Error al analizar el código fuente.")

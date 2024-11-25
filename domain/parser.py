@@ -111,15 +111,13 @@ def p_factor(p):
 
 def p_error(p):
     if p:
-        # Error debido a un token inesperado
         error_message = f"ERROR: Token inesperado '{p.value}' en la línea {p.lineno}, posición {p.lexpos}."
         suggestion = f"Sugerencia: revise la estructura cerca de '{p.value}'."
-        print(error_message)  # Opcional: imprimir en consola para debug
+        print(error_message)
         raise SyntaxError(f"{error_message}\n{suggestion}")
     else:
-        # Error debido al fin de archivo inesperado
         error_message = "ERROR: Fin de archivo inesperado. Posiblemente falta cerrar un bloque o una expresión."
-        print(error_message)  # Opcional: imprimir en consola para debug
+        print(error_message)
         raise SyntaxError(error_message)
 
 # Build the parser
