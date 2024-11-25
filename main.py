@@ -9,8 +9,6 @@ from domain.tree import build_tree, draw_tree
 from domain.graph import graficar_afd, graficar_afn
 import pprint
 
-
-
 # Define la clase principal de la aplicación
 class Main(QMainWindow):
     def __init__(self):
