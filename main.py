@@ -82,6 +82,9 @@ class Main(QMainWindow):
             with open(fileName, 'r') as file:
                 data = file.read()
                 self.codigoFuente.setText(data)
+        if self.codigoFuente:
+            self.analisisLexico.clear()
+            self.analisisSintactico.clear()
                 
      # Función para realizar el análisis léxico
     def ev_lexico(self):
@@ -127,7 +130,6 @@ class Main(QMainWindow):
         self.analisisSintactico.clear()  # Limpiar salida previa
         data = self.codigoFuente.toPlainText()  # Obtener código fuente
     
-        # Verificar si hay código fuente
         if not data.strip():
             self.analisisSintactico.setText("No se encontró código fuente para analizar.")
             return
@@ -135,21 +137,19 @@ class Main(QMainWindow):
         try:
             # Limpiar líneas vacías y concatenar todo el programa
             cleaned_data = "\n".join(line.strip() for line in data.splitlines() if line.strip())
-    
-            # Realizar análisis sintáctico completo
             result = parser.parse(cleaned_data, lexer=lexer)
     
             if result:
-                if isinstance(result, tuple) and result[0] == 'program':
-                    result = result[1]
-                # Formatear el resultado del AST y mostrarlo
                 formatted_ast = pprint.pformat(result, width=80, indent=4)
                 self.analisisSintactico.setText(formatted_ast)
             else:
                 self.analisisSintactico.setText("ERROR: Error sintáctico\nNo se pudo generar el resultado del análisis sintáctico.")
+        except SyntaxError as se:
+            self.analisisSintactico.setText(str(se))
         except Exception as e:
-            # Capturar errores inesperados y mostrarlos
-            self.analisisSintactico.setText(f"ERROR: {e}")
+            self.analisisSintactico.setText(f"ERROR inesperado: {e}")
+
+
 
 
     def format_ast(self, node, indent=0):

@@ -110,27 +110,17 @@ def p_factor(p):
         p[0] = ('grouped', p[2])
 
 def p_error(p):
-    """
-    Handle syntax errors and display detailed error messages.
-    This function will return an error message that can be used in the GUI.
-    """
     if p:
-        # If there is a parsing error, display the unexpected token
+        # Error debido a un token inesperado
         error_message = f"ERROR: Token inesperado '{p.value}' en la línea {p.lineno}, posición {p.lexpos}."
-        
-        # Suggestion for fixing the error (based on the token type)
-        suggestion = f"Sugerencia: revise la estructura cerca de '{p.value}'"
-
-        # Combine error message and suggestion
-        error_message += f"\n{suggestion}"
-
-        # Return the error message to be used by the GUI
-        return error_message
+        suggestion = f"Sugerencia: revise la estructura cerca de '{p.value}'."
+        print(error_message)  # Opcional: imprimir en consola para debug
+        raise SyntaxError(f"{error_message}\n{suggestion}")
     else:
-        # If the error is at the end of the input (unexpected EOF)
+        # Error debido al fin de archivo inesperado
         error_message = "ERROR: Fin de archivo inesperado. Posiblemente falta cerrar un bloque o una expresión."
-        return error_message
-
+        print(error_message)  # Opcional: imprimir en consola para debug
+        raise SyntaxError(error_message)
 
 # Build the parser
-parser = yacc.yacc(debug=True)
+parser = yacc.yacc(errorlog=yacc.NullLogger())  # Anula el log estándar y delega en p_error
